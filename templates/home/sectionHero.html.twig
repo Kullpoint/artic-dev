@@ -1,0 +1,28 @@
+<div class="section-hero section-outer">
+    {# ======================================================= Header section ====================================================== #}
+    {% include 'home/mainPageHeader.html.twig' %}
+    {# ============================================================================================================================= #}
+    <div class="section-hero__wrapper">
+        <h1 class="section-hero__title text-fsboldb__bold">Online-service ordering service</h1>
+        <div class="section-hero__description text-fslb__regular">
+            Proven professionals to perform your household or business tasks
+        </div>
+        <form action="{{ path('searchPerformers') }}" method="POST" class="section-hero__search">
+            <div class="section-hero__category-btn" data-category-btn>
+                <span class="text-fsd__semibold" data-category-input>Category</span>
+                <i class="fas fa-chevron-down"></i>
+            </div>
+            <ul class="dropdown-list dn" data-category-list>
+                {% for category in allCategories %}
+                    <li class="dropdown-list__item" data-category-item>
+                        <span class="text-fsd__semibold" data-category-value>{{ category.topic }}</span>
+                        <span class="item-count text-fss__semibold">999</span>
+                    </li>
+                {% endfor %}
+            </ul>
+            <input type="text" class="search__input text-fsd__regular" name="performer" placeholder="What you want to find?">
+            <button type="submit" class="search__btn text-fsd__bold">Search</button>
+        </form>
+    </div>
+    <img src="{{ asset('img/mainPeople.svg') }}" class="section-hero__img">
+</div>

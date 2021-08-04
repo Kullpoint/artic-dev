@@ -1,0 +1,126 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cabinet{% endblock %}
+
+{% block body %}
+    <div class="profile center">
+        <div class="order">
+            {% include 'cabinet/orderLayout.html.twig' %}
+            <div class="order__data">
+                <div class="order__data-part">
+                    <div class="order__data-part-data">
+                        <div class="order__header-title">Description</div>
+                        <div class="order__data-desc">{{ order.description }}</div>
+                    </div>
+                </div>
+                <div class="order__data-part">
+                    <div class="order__data-part-data">
+                        <div class="order__header-title">Requirements</div>
+                        <div class="order__data-desc">{{ order.requirements }}</div>
+                    </div>
+                </div>
+                {% if order.status == 'in process' %}
+                {{ form_start(form) }}
+                {{ form_errors(form.doc) }}
+                {{ form_widget(form.doc, {'attr': {'accept': 'application/msword, application/vnd.openxmlformats-officedocument.wordprocessingml.document', 'class': 'auth__form-block-avatar', 'placeholder': order.price}}) }}
+                <div class="order__data-part">
+                    <div class="order__data-part-doc">
+                        <div class="auth__form-block-add-avatar">
+                            <img id="img" src="{{ asset('build/images/add.svg') }}">
+                        </div>
+                        <div class="auth__form-block-add-text" id="doc">
+                            Ready Document
+                        </div>
+                    </div>
+                </div>
+                <div class="order__data_btns">
+                    <button class="order__data_btn confirm" type="submit">Ready</button>
+                </div>
+                {{ form_end(form) }}
+            </div>
+            <div class="order__block-line comment"></div>
+            <div class="order__data">
+                <div class="order__data-part">
+                    {% if comments %}
+                        <div class="order__data-part-data">
+                            <div class="order__header-title">Comments</div>
+                            <div id="comments">
+                                {% for comment in comments %}
+                                    <div class="comment {{ app.user == comment.user ? 'me' : '' }}">
+                                        <div
+                                            class="comment-title">{{ comment.user.firstname ~ ' ' ~ comment.user.lastname }}</div>
+                                        <div class="comment-text">{{ comment.comment }}</div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    {% endif %}
+                </div>
+                <div class="profile__data_form-block comment">
+                    <input id="comment" class="profile__data_form-block-input" placeholder="Add comment..">
+                </div>
+            </div>
+            {% else %}
+        </div>
+        {% endif %}
+    </div>
+    {% if order.status == 'ready' and comments %}
+        <div class="order__block-line comment"></div>
+        <div class="order__data">
+            <div class="order__data-part">
+                <div class="order__data-part-data">
+                    <div class="order__header-title">Comments</div>
+                    <div id="comments">
+                        {% for comment in comments %}
+                            <div class="comment {{ app.user == comment.user ? 'me' : '' }}">
+                                <div class="comment-title">{{ comment.user.firstname ~ ' ' ~ comment.user.lastname }}</div>
+                                <div class="comment-text">{{ comment.comment }}</div>
+                            </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    {% endif %}
+</div>
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        $('#comment').on('change', function () {
+            $.ajax({
+                url: "/order/addComment",
+                data: {
+                    id: {{ order.id }},
+                    comment: $('#comment').val(),
+                },
+                type: 'POST',
+                success: function (data) {
+                    $('#comment').val('');
+                    $('#comments').html(data);
+                }
+            })
+        });
+        $('.delete').click(function (e) {
+            $.ajax({
+                url: "/order/deleteComment",
+                data: {
+                    id: this.id,
+                },
+                type: 'POST',
+                success: function () {
+                    e.target.parentNode.remove();
+                }
+            })
+        });
+
+        $('#order_ready_doc').change(function () {
+            document.getElementById('img').src = '{{ asset('build/images/document.svg') }}';
+            document.getElementById('doc').innerHTML = 'Document uploaded';
+        });
+
+        $('.order__data-part-doc').on('click', function () {
+            $('#order_ready_doc').click();
+        });
+    </script>
+{% endblock %}

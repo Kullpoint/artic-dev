@@ -1,0 +1,135 @@
+{% extends 'security/base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="auth" id="auth">
+            <div class="auth__part">
+                <div class="auth__part_block">
+                    <div class="auth__part_block-name">
+                        <a href="{{ path('home') }}">Artic</a>
+                    </div>
+                    <div class="auth__part_block-title">
+                        Sing up to Artic
+                    </div>
+                    <div class="auth__part_block-account">
+                        Already have an account? <a href="{{ path('app_login') }}">Log in.</a>
+                    </div>
+
+                    <div class="auth__part_block-select">
+                        Select the type of person you want to register with
+                    </div>
+                    <div class="auth__roles">
+                        <a href="{{ path('registerUser') }}" class="auth__role" id="user">
+                            <div class="auth__role-part">
+                                <div class="auth__role-image-block">
+                                    <img class="auth__role-image" id="userImg"
+                                         src="{{ asset('build/images/userRole.svg') }}">
+                                </div>
+                                <div class="auth__role-block">
+                                    <div class="auth__role-block-user">
+                                        User
+                                    </div>
+                                    <div class="auth__role-block-text">
+                                        Trusted by freelancers
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="auth__role-confirm">
+                                <img src="{{ asset('build/images/arrow.svg') }}">
+                            </div>
+                        </a>
+                        <a href="{{ path('registerPerformer') }}" class="auth__role" id="performer">
+                            <div class="auth__role-part">
+                                <div class="auth__role-image-block">
+                                    <img class="auth__role-image" id="performerImg"
+                                         src="{{ asset('build/images/performerRole.svg') }}">
+                                </div>
+                                <div class="auth__role-block">
+                                    <div class="auth__role-block-user">
+                                        Performer
+                                    </div>
+                                    <div class="auth__role-block-text">
+                                        Trusted by freelancers
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="auth__role-confirm">
+                                <img src="{{ asset('build/images/arrow.svg') }}">
+                            </div>
+                        </a>
+                        <a href="{{ path('registerPartner') }}" class="auth__role" id="partner">
+                            <div class="auth__role-part">
+                                <div class="auth__role-image-block">
+                                    <img class="auth__role-image" id="partnerImg"
+                                         src="{{ asset('build/images/partnerRole.svg') }}">
+                                </div>
+                                <div class="auth__role-block">
+                                    <div class="auth__role-block-user">
+                                        Partner
+                                    </div>
+                                    <div class="auth__role-block-text">
+                                        Trusted by freelancers
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="auth__role-confirm">
+                                <img src="{{ asset('build/images/arrow.svg') }}">
+                            </div>
+                        </a>
+                    </div>
+
+                </div>
+            </div>
+            <div class="auth__image">
+                <img class="auth__image_img" id="authImg" src="{{ asset('build/images/student.svg') }}">
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        function authRoleActive(elem) {
+            document.getElementById('auth').classList.add('active');
+            $.each(document.getElementsByClassName('auth__role'), function setClass() {
+                this.className = 'auth__role';
+                this.childNodes[1].childNodes[1].className = 'auth__role-image-block';
+                this.childNodes[3].setAttribute('style', 'opacity: 0;');
+                document.getElementById('userImg').setAttribute('src', '{{ asset("build/images/userRole.svg") }}');
+                document.getElementById('performerImg').setAttribute('src', '{{ asset("build/images/performerRole.svg") }}');
+                document.getElementById('partnerImg').setAttribute('src', '{{ asset("build/images/partnerRole.svg") }}');
+            });
+            elem.classList.add('active');
+            elem.childNodes[1].childNodes[1].classList.add('active');
+            elem.childNodes[3].setAttribute('style', 'opacity: 1;');
+        }
+
+        document.getElementById('user').addEventListener('click', function (e) {
+            if (this.classList.contains('active') !== true) {
+                e.preventDefault();
+                document.getElementById('authImg').setAttribute('src', '{{ asset("build/images/student2.svg") }}');
+                authRoleActive(this);
+                document.getElementById('userImg').setAttribute('src', '{{ asset("build/images/userRoleActive.svg") }}');
+            }
+        });
+
+        document.getElementById('performer').addEventListener('click', function (e) {
+            if (this.classList.contains('active') !== true) {
+                e.preventDefault();
+                document.getElementById('authImg').setAttribute('src', '{{ asset("build/images/student.svg") }}');
+                authRoleActive(this);
+                document.getElementById('performerImg').setAttribute('src', '{{ asset("build/images/performerRoleActive.svg") }}');
+            }
+        });
+
+        document.getElementById('partner').addEventListener('click', function (e) {
+            if (this.classList.contains('active') !== true) {
+                e.preventDefault();
+                document.getElementById('authImg').setAttribute('src', '{{ asset("build/images/student1.svg") }}');
+                authRoleActive(this);
+                document.getElementById('partnerImg').setAttribute('src', '{{ asset("build/images/partnerRoleActive.svg") }}');
+            }
+        });
+    </script>
+{% endblock %}

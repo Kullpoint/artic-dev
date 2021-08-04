@@ -1,0 +1,27 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Categories{% endblock %}
+
+{% block body %}
+    <div class="categories">
+        <div class="categories__title">
+            <h1>Categories NYEEEEEEEEEZ</h1>
+            <p>with a variety of {{ categories|length }} topics and subtopics</p>
+        </div>
+        <div class="categories__items">
+            {% for category in categories %}
+                <a href="{{ path('performers', {'category': category.id}) }}" class="categories__item">
+                    <div class="categories__item_line dark-blue"></div>
+                    <div class="categories__item_img">
+                        <img src="{{ asset('build/images/' ~ category.image) }}">
+                    </div>
+                    <div class="categories__item_info">
+                        <div class="categories__item_info-title">{{ category.topic }}</div>
+                        <div class="categories__item_info-performers">{{ category.performers|length }} performers</div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="bottom"></div>
+{% endblock %}

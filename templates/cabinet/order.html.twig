@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cabinet{% endblock %}
+
+{% block body %}
+    <div class="profile center">
+        <div class="order">
+            {% include 'cabinet/orderLayout.html.twig' %}
+            <div class="order__data">
+                <div class="order__data-part">
+                    <div class="order__data-part-data">
+                        <div class="order__header-title">Description</div>
+                        <div class="order__data-desc">{{ order.description }}</div>
+                    </div>
+                </div>
+                <div class="order__data-part">
+                    <div class="order__data-part-data">
+                        <div class="order__header-title">Requirements</div>
+                        <div class="order__data-desc">{{ order.requirements }}</div>
+                    </div>
+                </div>
+                <div class="order__data-part">
+                    <a href="{{ asset('uploads/docs/' ~ order.doc) }}" class="order__data-part-doc download">
+                        <div class="auth__form-block-add-avatar">
+                            <img id="img" src="{{ asset('build/images/document.svg') }}">
+                        </div>
+                        <div class="auth__form-block-add-text download" id="doc">
+                            Download
+                        </div>
+                    </a>
+                </div>
+                <div class="order__data_btns">
+                    {% if app.user.client %}
+                        {% if order.status == 'ready' %}
+                            <a href="{{ path('order_confirm', {'id': order.id}) }}" class="order__data_btn confirm" type="submit">Confirm</a>
+                            <a href="{{ path('order_not_ready', {'id': order.id}) }}" class="order__data_btn decline" type="submit">Not ready</a>
+                        {% endif %}
+                        {% if order.status == 'done' %}
+                            <a href="{{ path('performerReviews', {'id': order.performer.id, 'order': order.id}) }}" class="order__data_btn confirm" type="submit">Review</a>
+                            <a href="{{ path('order_delete', {'id': order.id}) }}" class="order__data_btn decline" type="submit">Delete</a>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            {% if comments %}
+                <div class="order__block-line comment"></div>
+                <div class="order__data">
+                    <div class="order__data-part">
+                        <div class="order__data-part-data">
+                            <div class="order__header-title">Comments</div>
+                            <div id="comments">
+                                {% for comment in comments %}
+                                    <div class="comment {{ app.user == comment.user ? 'me' : '' }}">
+                                        <div class="comment-title">{{ comment.user.firstname ~ ' ' ~ comment.user.lastname }}</div>
+                                        <div class="comment-text">{{ comment.comment }}</div>
+                                    </div>
+                                {% endfor %}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}

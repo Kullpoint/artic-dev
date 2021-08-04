@@ -1,0 +1,26 @@
+{% for comment in comments %}
+    {% if app.user == comment.user %}
+        <div class="comment me">
+    {% else %}
+        <div class="comment">
+    {% endif %}
+        <div class="comment-title">{{ comment.user.firstname ~ ' ' ~ comment.user.lastname }}</div>
+        <div class="comment-text">{{ comment.comment }}</div>
+    </div>
+{% endfor %}
+{% block javascripts %}
+    <script type="text/javascript">
+        $('.delete').click(function (e) {
+            $.ajax({
+                url: "/order/deleteComment",
+                data: {
+                    id: this.id,
+                },
+                type: 'POST',
+                success: function () {
+                    e.target.parentNode.remove();
+                }
+            })
+        });
+    </script>
+{% endblock %}

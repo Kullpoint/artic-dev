@@ -1,0 +1,211 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Users{% endblock %}
+
+{% block adminBody %}
+    <div class="admin">
+        <div class="profile__data_title">
+            {% if users|last.user.performer %}
+                Performers
+            {% elseif users|last.user.partner %}
+                Partners
+            {% elseif users|last.user.client %}
+                Users
+            {% endif %}
+            <div class="profile__data-filter">
+                <img src="{{ asset('build/images/filter.svg') }}">
+                <div class="dropdown">
+                    <a href="{{ path('admin_users', {'filter': 'name'}) }}">By Name</a>
+                    <a href="{{ path('admin_users', {'filter': 'country'}) }}">By Country</a>
+                    <a href="{{ path('admin_users', {'filter': 'mail'}) }}">By Mail</a>
+                </div>
+            </div>
+        </div>
+        <div class="admin__container">
+            <div class="admin__users">
+                {% for user in users %}
+                    <div class="admin__user">
+                        {% if user.user.performer %}
+                            <div class="admin__user_avatar">
+                                {% if user.avatar %}
+                                    <img src="{{ asset('uploads/avatars/' ~ user.avatar) }}">
+                                {% else %}
+                                    <img src="{{ asset('img/NEW/user.svg') }}">
+                                {% endif %}
+                                <div class="admin__user_info">
+                                    <div class="performers__item_info-name">{{ user.user.firstname ~ ' ' ~ user.user.lastname }}</div>
+                                    <div class="performers__item_info-experience">
+                                        {% for category in user.categories %}
+                                            {% if user.categories|last == category %}
+                                                {{ category.topic }}
+                                            {% else %}
+                                                {{ category.topic ~ ', ' }}
+                                            {% endif %}
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        {% elseif user.user.partner %}
+                            <div class="admin__user_avatar">
+                                <img src="{{ asset('img/NEW/user.svg') }}">
+                                <div class="admin__user_info">
+                                    <div class="performers__item_info-name">{{ user.user.firstname ~ ' ' ~ user.user.lastname }}</div>
+                                    <div class="admin__user_info-part">
+                                        {{ url('registerUser', {'referral': user.referral}) }}
+                                    </div>
+                                </div>
+                            </div>
+                        {% elseif user.user.client %}
+                            <div class="admin__user_avatar">
+                                <img src="{{ asset('img/NEW/user.svg') }}">
+                                <div class="admin__user_info">
+                                    <div class="performers__item_info-name">{{ user.user.firstname ~ ' ' ~ user.user.lastname }}</div>
+                                    <div class="performers__item_info-experience">{{ user.city ~ ', ' ~ user.country }}</div>
+                                </div>
+                            </div>
+                        {% endif %}
+                        <div class="admin__user_avatar">{{ user.user.phone }}</div>
+                        <div class="admin__user_avatar">{{ user.user.email }}</div>
+                        <button class="order__block-right">
+                            <img src="{{ asset('build/images/actions.svg') }}">
+                            <div class="dropdown">
+                                {% if user.user.isBlocked %}
+                                    <a href="#" class="block" id="{{ user.user.id }}">Unblock</a>
+                                {% else %}
+                                    <a href="#" class="block" id="{{ user.user.id }}">Block</a>
+                                {% endif %}
+                                <a href="#" class="remove" id="{{ user.user.id }}">Remove</a>
+                            </div>
+                        </button>
+                    </div>
+                    <div class="order__block-line"></div>
+                {% endfor %}
+            </div>
+            <div class="performers__pagination_block">
+                {{ knp_pagination_render(users) }}
+                {% if users|length > 10 %}
+                    {% if users|last.user.performer %}
+                        <form class="performers__pagination_go" method="post" action="{{ path('admin_performersgo') }}" id="go">
+                    {% elseif users|last.user.partner %}
+                        <form class="performers__pagination_go" method="post" action="{{ path('admin_partnersgo') }}"
+                            id="go">
+                    {% elseif users|last.user.client %}
+                        <form class="performers__pagination_go" method="post" action="{{ path('admin_usersgo') }}"
+                            id="go">
+                    {% endif %}
+                        <div class="performers__pagination_go-page">Go to page:</div>
+                        <input type="text" name="page " class="performers__pagination_go-input">
+                        <button type="submit" class="performers__pagination_go-btn">Go</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script>
+      const url = window.location.pathname;
+      const urlSearchParams = new URLSearchParams(window.location.search);
+      const params = Object.fromEntries(urlSearchParams.entries());
+      $('.block').on('click', function (e) {
+        const user = params.page ? '?page=' + params.page + '&user=' : '?user=';
+        $.ajax({
+          url: url + user + e.target.id + '&block=true&ajax=true',
+          type: 'GET',
+          success: function (response) {
+            $('.admin__users').html(response);
+          }
+        })
+      });
+
+      $('.remove').on('click', function (e) {
+        const user = params.page ? '?page=' + params.page + '&user=' : '?user=';
+        $.ajax({
+          url: url + user  + e.target.id + '&remove=true&ajax=true',
+          type: 'GET',
+          success: function (response) {
+            $('.admin__users').html(response);
+          }
+        })
+      });
+
+      document.querySelectorAll('.profile__data-filter').forEach(button => {
+        button.addEventListener('click', function () {
+          dropdown(button);
+
+          Array.from(document.getElementsByClassName('profile__data-filter')).forEach(btn => {
+            const img = btn.childNodes[1];
+            if ((btn !== button) && (img.src.indexOf('activeFilter.svg') !== -1)) {
+              btn.style.background = '#FFFFFF';
+              img.src = "{{ asset('build/images/filter.svg') }}";
+            }
+          });
+
+          const img = button.childNodes[1];
+          if (img.src.indexOf('filter.svg') !== -1) {
+            button.style.background = '#035FFE';
+            img.src = "{{ asset('build/images/activeFilter.svg') }}";
+          } else if (img.src.indexOf('activeFilter.svg') !== -1) {
+            button.style.background = '#FFFFFF';
+            img.src = "{{ asset('build/images/filter.svg') }}";
+          }
+
+          Array.from(document.getElementsByClassName('order__block-right')).forEach(btn => {
+            const img = btn.childNodes[1];
+            if (img.src.indexOf('activeActions.svg') !== -1) {
+              btn.style.background = '#FFFFFF';
+              img.src = "{{ asset('build/images/actions.svg') }}";
+            }
+          });
+        });
+      });
+
+      Array.from(document.getElementsByClassName('order__block-right')).forEach(button => {
+        button.addEventListener('click', function () {
+          dropdown(button);
+
+          Array.from(document.getElementsByClassName('order__block-right')).forEach(btn => {
+            const img = btn.childNodes[1];
+            if ((btn !== button) && (img.src.indexOf('activeActions.svg') !== -1)) {
+              btn.style.background = '#FFFFFF';
+              img.src = "{{ asset('build/images/actions.svg') }}";
+            }
+          });
+
+          const img = button.childNodes[1];
+          if (img.src.indexOf('actions.svg') !== -1) {
+            button.style.background = '#035FFE';
+            img.src = "{{ asset('build/images/activeActions.svg') }}";
+          } else if (img.src.indexOf('activeActions.svg') !== -1) {
+            button.style.background = '#FFFFFF';
+            img.src = "{{ asset('build/images/actions.svg') }}";
+          }
+
+          Array.from(document.getElementsByClassName('profile__data-filter')).forEach(btn => {
+            const img = btn.childNodes[1];
+            if (img.src.indexOf('activeFilter.svg') !== -1) {
+              btn.style.background = '#FFFFFF';
+              img.src = "{{ asset('build/images/filter.svg') }}";
+            }
+          });
+        });
+      });
+
+      function dropdown(button) {
+        Array.from(document.getElementsByClassName('dropdown')).forEach(dropdown => {
+          if ((button.childNodes[3] !== dropdown) && (dropdown.style.display === 'block')) {
+            dropdown.style.display = 'none';
+          }
+        });
+
+        let display = button.childNodes[3].style.display;
+        if (display && display === 'none') {
+          button.childNodes[3].style.display = 'block';
+        } else if (display === 'block') {
+          button.childNodes[3].style.display = 'none';
+        } else {
+          button.childNodes[3].style.display = 'block';
+        }
+      }
+    </script>
+{% endblock %}

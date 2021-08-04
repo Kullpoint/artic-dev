@@ -1,0 +1,155 @@
+{% extends 'security/base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="auth active" id="auth">
+            <div class="auth__part">
+                <div class="auth__part_block">
+                    <div class="auth__part_block-name">
+                        <a href="{{ path('home') }}">Artic</a>
+                    </div>
+                    <div class="auth__part_block-title register">
+                        Sing up to Artic
+                    </div>
+                    <div class="auth__part_block-account">
+                        Already have an account? <a href="{{ path('app_login') }}">Log in.</a>
+                    </div>
+
+                    {% for flashError in app.flashes('verify_email_error') %}
+                        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+                    {% endfor %}
+
+                    {{ form_start(registrationForm, {'attr': {'class': 'auth__form'}}) }}
+                    <div class="auth__form-inputs">
+                        <div class="auth__form-block">
+                            {{ form_errors(registrationForm.email) }}
+                            {{ form_label(registrationForm.email) }}
+                            {{ form_widget(registrationForm.email, {'attr': {'class': 'auth__form-block-input'}}) }}
+                        </div>
+                        <div class="auth__form-block-inputs">
+                            <div class="auth__form-block-inputs-block">
+                                {{ form_errors(registrationForm.lastname) }}
+                                {{ form_label(registrationForm.lastname) }}
+                                {{ form_widget(registrationForm.lastname, {'attr': {'class': 'auth__form-block-input'}}) }}
+                            </div>
+                            <div class="auth__form-block-inputs-block">
+                                {{ form_errors(registrationForm.firstname) }}
+                                {{ form_label(registrationForm.firstname) }}
+                                {{ form_widget(registrationForm.firstname, {'attr': {'class': 'auth__form-block-input'}}) }}
+                            </div>
+                        </div>
+                        <div class="auth__form-block">
+                            {{ form_errors(registrationForm.phone) }}
+                            {{ form_label(registrationForm.phone) }}
+                            {{ form_widget(registrationForm.phone, {'attr': {'class': 'auth__form-block-input'}}) }}
+                        </div>
+                        <div class="auth__form-block-inputs">
+                            <div class="auth__form-block-inputs-block">
+                                {{ form_errors(registrationForm.country) }}
+                                {{ form_label(registrationForm.country) }}
+                                {{ form_widget(registrationForm.country, {'attr': {'class': 'auth__form-block-input'}}) }}
+                            </div>
+                            <div class="auth__form-block-inputs-block">
+                                {{ form_errors(registrationForm.city) }}
+                                {{ form_label(registrationForm.city) }}
+                                {{ form_widget(registrationForm.city, {'attr': {'class': 'auth__form-block-input'}}) }}
+                            </div>
+                        </div>
+                        <div class="auth__form-block-inputs">
+                            <div class="auth__form-block-inputs-block">
+                                {{ form_errors(registrationForm.password) }}
+                                {{ form_label(registrationForm.password.first) }}
+                                <img src="{{ asset('build/images/notActivePass.svg') }}" class="pass">
+                                {{ form_widget(registrationForm.password.first, {'attr': {'class': 'auth__form-block-input'}}) }}
+                            </div>
+                            <div class="auth__form-block-inputs-block">
+                                {{ form_errors(registrationForm.password) }}
+                                {{ form_label(registrationForm.password.second) }}
+                                <img src="{{ asset('build/images/notActivePass.svg') }}" class="pass">
+                                {{ form_widget(registrationForm.password.second, {'attr': {'class': 'auth__form-block-input'}}) }}
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="auth__form-btns">
+                        <button type="submit" id="submit" class="auth__form-btn-main not-active">Next step</button>
+                        <p class="auth__form-sign">or Sing up with</p>
+                        <div class="auth__form-buttons">
+                            <a href="#" class="auth__form-button">
+                                <img class="fab" src="{{ asset('build/images/google.svg') }}">
+                                <p>Google</p>
+                            </a>
+                            <a href="{{ path('connect_facebook_start') }}" class="auth__form-button">
+                                <img class="fab" src="{{ asset('build/images/facebook.svg') }}">
+                                <p>Facebook</p>
+                            </a>
+                        </div>
+                    </div>
+                    {{ form_end(registrationForm) }}
+                </div>
+            </div>
+            <div class="auth__image">
+                <img class="auth__image_img" src="{{ asset('build/images/student.svg') }}">
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        Array.from(document.getElementsByClassName('pass')).forEach( img => {
+            img.addEventListener('click', function () {
+                if (img.src.indexOf('notActivePass.svg') !== -1) {
+                    img.src = "{{ asset('build/images/activePass.svg') }}";
+                    if (this.parentNode.childNodes.length > 7) {
+                        this.parentNode.childNodes[7].type = 'text';
+                    } else {
+                        this.parentNode.childNodes[5].type = 'text';
+                    }
+                } else {
+                    img.src = "{{ asset('build/images/notActivePass.svg') }}";
+                    if (this.parentNode.childNodes.length > 7) {
+                        this.parentNode.childNodes[7].type = 'text';
+                    } else {
+                        this.parentNode.childNodes[5].type = 'password';
+                    }
+                }
+            });
+        });
+
+        const form = document.querySelector('form');
+        var submit = document.getElementById('submit');
+
+        form.addEventListener('change', changeFormHandler);
+
+        function changeFormHandler() {
+            if (form.checkValidity()) {
+                submit.classList.remove('not-active');
+            } else {
+                submit.classList.add('not-active');
+            }
+        }
+
+        function setInputFilter(textbox, inputFilter) {
+            ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop"].forEach(function(event) {
+                textbox.addEventListener(event, function() {
+                    if (inputFilter(this.value)) {
+                        this.oldValue = this.value;
+                        this.oldSelectionStart = this.selectionStart;
+                        this.oldSelectionEnd = this.selectionEnd;
+                    } else if (this.hasOwnProperty("oldValue")) {
+                        this.value = this.oldValue;
+                        this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+                    } else {
+                        this.value = "";
+                    }
+                });
+            });
+        }
+
+        setInputFilter(document.getElementById("registration_user_form_phone"), function(value) {
+            return /^\d*\.?\d*$/.test(value); // Allow digits and '.' only, using a RegExp
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,94 @@
+<div class="profile__block">
+    <div class="profile__user">
+        <div class="profile__user_main">
+            {% if app.user.performer and app.user.performer.avatar and changeData %}
+                {{ form_start(form, {'attr': {'class': 'profile__user_avatar', 'id': 'avatar'}}) }}
+                    <img id="ava" src="{{ asset('uploads/avatars/' ~ app.user.performer.avatar) }}">
+                    <div class="profile__user_camera" id="camera">
+                        <img class="camera" src="{{ asset('build/images/camera.svg') }}">
+                    </div>
+                    {{ form_widget(form.avatar, {'attr': {'class': 'file'}}) }}
+                {{ form_end(form) }}
+            {% elseif app.user.performer and changeData %}
+                {{ form_start(form, {'attr': {'class': 'profile__user_avatar', 'id': 'avatar'}}) }}
+                <img id="ava" src="{{ asset('img/NEW/user.svg') }}">
+                <div class="profile__user_camera" id="camera">
+                    <img class="camera" src="{{ asset('build/images/camera.svg') }}">
+                </div>
+                {{ form_widget(form.avatar, {'attr': {'class': 'file'}}) }}
+                {{ form_end(form) }}
+            {% elseif app.user.performer and app.user.performer.avatar %}
+                <div class="profile__user_avatar" id="avatar">
+                    <img id="ava" src="{{ asset('uploads/avatars/' ~ app.user.performer.avatar) }}">
+                </div>
+            {% elseif app.user.performer %}
+                <div class="profile__user_avatar" id="avatar">
+                    <img src="{{ asset('img/NEW/user.svg') }}">
+                </div>
+            {% else %}
+                <div class="profile__user_avatar" id="avatar">
+                    <img src="{{ asset('img/NEW/user.svg') }}">
+                </div>
+            {% endif %}
+            <div class="profile__user_info">
+                <div class="profile__user_info-name">{{ app.user.firstname }} {{ app.user.lastname }}</div>
+                {% if app.user.performer %}
+                    <div class="profile__user_info-text">Age: {{ app.user.performer.age }}</div>
+                    <div class="profile__user_info-text">City: {{ app.user.performer.city }}</div>
+                    <div class="profile__user_info-text">Country: {{ app.user.performer.country }}</div>
+                {% elseif app.user.client %}
+                    <div class="profile__user_info-text">City: {{ app.user.client.city }}</div>
+                    <div class="profile__user_info-text">Country: {{ app.user.client.country }}</div>
+                {% elseif app.user.partner %}
+                    <div class="profile__user_info-text">Age: {{ app.user.partner.age }}</div>
+                    <div class="profile__user_info-text">Phone: {{ app.user.phone }}</div>
+                    <div class="profile__user_info-text">Email: {{ app.user.email }}</div>
+                {% endif %}
+            </div>
+        </div>
+        <div class="profile__user_data">
+            {% if not app.user.partner %}
+                <div class="profile__user_data-block">
+                    <img src="{{ asset('build/images/phone.svg') }}">
+                    <div class="profile__user_data-text">{{ app.user.phone }}</div>
+                </div>
+                <div class="profile__user_data-block">
+                    <img src="{{ asset('build/images/mail.svg') }}">
+                    <div class="profile__user_data-text">{{ app.user.email }}</div>
+                </div>
+            {% else %}
+                <div class="profile__user_info-text">Referral link: </div>
+                <div class="tooltip">
+                    <span class="tooltiptext" id="myTooltip">Copy to clipboard</span>
+                    <button class="profile__user_info-text referral" id="referral" onmouseout="outFunc()">
+                        {{ url('registerUser', {'referral': app.user.partner.referral}) }}
+                    </button>
+                </div>
+            {% endif %}
+        </div>
+        <div class="profile__user_btns">
+            <button class="profile__user_btns-edit" id="edit"><a href="{{ path('user_settings') }}">{{ edit }}</a></button>
+            <button class="profile__user_btns-settings" id="settings"><a href="{{ path('user_settings') }}">{{ settings }}</a></button>
+        </div>
+    </div>
+</div>
+{% block javascripts %}
+    <script type="text/javascript">
+        document.getElementById('referral').addEventListener('click', () => {
+            const el = document.createElement('textarea');
+            el.value = document.getElementById("referral").textContent;
+            document.body.appendChild(el);
+            el.select();
+            document.execCommand('copy');
+            document.body.removeChild(el);
+
+            const tooltip = document.getElementById("myTooltip");
+            tooltip.innerHTML = "Copied";
+        });
+
+        function outFunc() {
+            const tooltip = document.getElementById("myTooltip");
+            tooltip.innerHTML = "Copy to clipboard";
+        }
+    </script>
+{% endblock %}

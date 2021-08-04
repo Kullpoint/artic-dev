@@ -1,0 +1,175 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Performers{% endblock %}
+
+{% block body %}
+    {{ form_start(filterForm, {'attr': {'id': 'filterForm', 'class': 'performers__filter'}}) }}
+        {{ form_widget(filterForm.experience, {'attr': {'class': 'performers__filter_select', 'placeholder': 'Experience'}}) }}
+        {{ form_widget(filterForm.topic, {'attr': {'class': 'performers__filter_select', 'placeholder': 'Topic'}}) }}
+        {{ form_widget(filterForm.summeryTypes, {'attr': {'class': 'performers__filter_select', 'placeholder': 'Summery types'}}) }}
+        {{ form_widget(filterForm.rating, {'attr': {'class': 'performers__filter_select', 'placeholder': 'Rating'}}) }}
+    {{ form_end(filterForm) }}
+    <div class="performers" id="performers">
+        <div class="performers__result">
+            <div class="performers__result_count">
+                {% if performers|length != 0 %}
+                    Showing 1 - {{ performers|length }} out of {% if total > 1000 %} 1000+ {% else %} {{ total }} {% endif %} results
+                {% else %}
+                    No results
+                {% endif %}
+            </div>
+            <form id="sortForm" class="performers__result_sort">
+                <p>Sort by:</p>
+                <select id="sortBy">
+                    <option>None</option>
+                    <option>Most popular</option>
+                    <option>Highest rating</option>
+                    <option>More votes</option>
+                </select>
+            </form>
+        </div>
+        <div class="performers__items">
+            {% for performer in performers %}
+                <a href="{{ path('performer', {'id': performer.id}) }}" class="performers__item">
+                    <div class="performers__item_main">
+                        <div class="performers__item_avatar">
+                            {% if performer.avatar %}
+                                <img src="{{ asset('uploads/avatars/' ~ performer.avatar) }}">
+                            {% else %}
+                                <img src="{{ asset('img/NEW/user.svg') }}">
+                            {% endif %}
+                        </div>
+                        <div class="performers__item_info">
+                            <div class="performers__item_info-name">{{ performer.user.firstname }} {{ performer.user.lastname }}</div>
+                            <div class="performers__item_info-experience">Experience: {{ performer.experience }} years</div>
+                            <div class="performers__item_info-experience">{{ performer.age }} age</div>
+                        </div>
+                    </div>
+                    <div class="performers__item_types">
+                        {% for category in performer.categories %}
+                            <div class="performers__item_type">{{ category.topic }}</div>
+                        {% endfor %}
+                    </div>
+                    <div class="performers__item_additionally">
+                        <div class="performers__item_rating">
+                            <div class="performers__item_rate">
+                                {% if performer.rating|round == 5 %}
+                                    <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                {% elseif performer.rating|round == 4 %}
+                                    <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateStar.svg') }}">
+                                {% elseif performer.rating|round == 3 %}
+                                    <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateStar.svg') }}">
+                                {% elseif performer.rating|round == 2 %}
+                                    <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateStar.svg') }}">
+                                {% elseif performer.rating|round == 1 %}
+                                    <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateStar.svg') }}">
+                                {% endif %}
+                            </div>
+                            <div class="performers__item_votes">{{ performer.reviews|length }} votes</div>
+                        </div>
+                        <div class="performers__item_go">
+                            <img src="{{ asset('build/images/arrow.svg') }}">
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+        <div class="performers__pagination_block">
+            {{ knp_pagination_render(performers) }}
+{#            <div class="performers__pagination">#}
+{#                <a href="#" class="performers__pagination_item back">#}
+{#                    <img src="{{ asset('build/images/arrow.svg') }}">#}
+{#                </a>#}
+{#                <a href="#" class="performers__pagination_item active">01</a>#}
+{#                <a href="#" class="performers__pagination_item">02</a>#}
+{#                <a href="#" class="performers__pagination_item">03</a>#}
+{#                <a href="#" class="performers__pagination_item">04</a>#}
+{#                <a href="#" class="performers__pagination_item">05</a>#}
+{#                <a href="#" class="performers__pagination_item">..</a>#}
+{#                <a href="#" class="performers__pagination_item">22</a>#}
+{#                <a href="#" class="performers__pagination_item">23</a>#}
+{#                <a href="#" class="performers__pagination_item">#}
+{#                    <img src="{{ asset('build/images/arrow.svg') }}">#}
+{#                </a>#}
+{#            </div>#}
+            <form class="performers__pagination_go" method="post" action="{{ path('performergo') }}" id="go">
+                <div class="performers__pagination_go-page">Go to page:</div>
+                <input type="text" name="page " class="performers__pagination_go-input">
+                <button type="submit" class="performers__pagination_go-btn">Go</button>
+            </form>
+        </div>
+    </div>
+    <div class="bottom"></div>
+{% endblock %}
+{% block javascripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/multiple-select@1.5.2/dist/multiple-select.min.js"></script>
+
+    <script type="text/javascript">
+        $('select[multiple="multiple"]').multipleSelect();
+
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+        if (params.category) {
+            Array.from($(document).find('li label span')).forEach(category => {
+                if (category.textContent === params.category) {
+                    category.click();
+                }
+            });
+        }
+
+        $('#filterForm, #sortForm').on('change', function () {
+            var formData = {
+                'rating': $('#filter_performers_rating').val(),
+                'topic': $('#filter_performers_topic').val(),
+                'experience': $('#filter_performers_experience').val(),
+                'summeryTypes': $('#filter_performers_summeryTypes').val(),
+                'sortBy': $('#sortBy').val(),
+                'performer': params.performer ? params.performer : null,
+            };
+            $.ajax({
+                url: "/filterPerformers",
+                data: formData,
+                type: 'POST',
+                success: function (data) {
+                    $('#performers').html(data);
+                }
+            })
+        });
+
+        if (document.getElementsByClassName('performers__item').length < 36) {
+            document.getElementById('go').style.display = 'none';
+        }
+
+        Array.from(document.getElementsByClassName('performers__item')).forEach(item => {
+            item.onmouseenter = function () {
+                item.childNodes[5].childNodes[3].childNodes[1].src = "{{ asset('build/images/whiteArrow.svg') }}";
+            };
+            item.onmouseleave = function () {
+                item.childNodes[5].childNodes[3].childNodes[1].src = "{{ asset('build/images/arrow.svg') }}";
+            };
+        });
+
+
+    </script>
+{% endblock %}

@@ -1,0 +1,65 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cabinet{% endblock %}
+
+{% block body %}
+    <div class="profile center">
+        <div class="order">
+            {% include 'cabinet/orderLayout.html.twig' %}
+            <div class="order__data">
+                <div class="order__data-part">
+                    <div class="order__data-part-data">
+                        <div class="order__header-title">Description</div>
+                        <div class="order__data-desc">{{ order.description }}</div>
+                    </div>
+                </div>
+                <div class="order__data-part">
+                    <div class="order__data-part-data">
+                        <div class="order__header-title">Requirements</div>
+                        <div class="order__data-desc">{{ order.requirements }}</div>
+                    </div>
+                    {% if order.status == 'new' %}
+                        {{ form_start(form) }}
+                        <div>
+                            <div class="profile__data_form-block">
+                                {{ form_errors(form.price) }}
+                                {{ form_label(form.price) }}
+                                {{ form_widget(form.price, {'attr': {'class': 'profile__data_form-block-input input', 'placeholder': order.price}}) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="order__data_btns">
+                        <button class="order__data_btn confirm" type="submit">Confirm</button>
+                        <button class="order__data_btn decline"><a href="{{ path('order_reject', {id: order.id}) }}">Decline</a></button>
+                    </div>
+                    {{ form_end(form) }}
+                {% else %}
+            </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        function setInputFilter(textbox, inputFilter) {
+            ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop"].forEach(function(event) {
+                textbox.addEventListener(event, function() {
+                    if (inputFilter(this.value)) {
+                        this.oldValue = this.value;
+                        this.oldSelectionStart = this.selectionStart;
+                        this.oldSelectionEnd = this.selectionEnd;
+                    } else if (this.hasOwnProperty("oldValue")) {
+                        this.value = this.oldValue;
+                        this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+                    } else {
+                        this.value = "";
+                    }
+                });
+            });
+        }
+
+        setInputFilter(document.getElementById("confirm_order_request_price"), function(value) {
+            return /^\d*\.?\d*$/.test(value); // Allow digits and '.' only, using a RegExp
+        });
+    </script>
+{% endblock %}

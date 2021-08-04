@@ -1,0 +1,220 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Users{% endblock %}
+
+{% block adminBody %}
+    <div class="admin">
+        <div class="profile__data_title">
+            <div class="admin__title">
+                <div id="reviewsShow">Reviews</div>
+                <div id="complaintsShow" class="not-active">Complaints</div>
+            </div>
+            <div class="profile__data-filter">
+                <img src="{{ asset('build/images/filter.svg') }}">
+                <div class="dropdown">
+                    <a href="{{ path('admin_reviews', {'filter': 'date'}) }}">By Date</a>
+                    <a href="{{ path('admin_reviews', {'filter': 'status'}) }}">By Status</a>
+                </div>
+            </div>
+        </div>
+        <div class="admin__container">
+            <div id="reviews">
+                <div class="admin__users">
+                    {% for review in reviews %}
+                        {% if review.complaint is null %}
+                            <div class="admin__review">
+                                <div class="admin__review_header">
+                                    <div class="admin__review_user">
+                                        <div class="admin__user_avatar">
+                                            <img src="{{ asset('img/NEW/user.svg') }}">
+                                        </div>
+                                        <div class="admin__review_user-info">
+                                            <div class="admin__review_user-header">
+                                                <div class="admin__review_user-name">
+                                                    {{ review.client.user.firstname ~ ' ' ~ review.client.user.lastname }}
+                                                </div>
+                                            </div>
+                                            <div class="admin__review_user-body">
+                                                {{ review.client.city }}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <button class="order__block-right">
+                                        <img src="{{ asset('build/images/actions.svg') }}">
+                                        <div class="dropdown">
+                                            <a href="#">Remove</a>
+                                        </div>
+                                    </button>
+                                </div>
+                                <div class="admin__review_body">
+                                    {{ review.text }}
+                                </div>
+                                <div class="order__block-line"></div>
+                            </div>
+                        {% endif %}
+                    {% endfor %}
+                </div>
+                <div class="performers__pagination_block">
+                    {{ knp_pagination_render(reviews) }}
+                    {% if reviews|length > 10 %}
+                        <form class="performers__pagination_go" method="post" action="{{ path('admin_reviewsgo') }}"
+                              id="go">
+                            <div class="performers__pagination_go-page">Go to page:</div>
+                            <input type="text" name="page " class="performers__pagination_go-input">
+                            <button type="submit" class="performers__pagination_go-btn">Go</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+            <div id="complaints" style="display: none">
+                <div class="admin__reviews">
+                    {% for complaint in complaints %}
+                        <div class="admin__review">
+                            <div class="admin__review_header">
+                                <div class="admin__review_user">
+                                    <div class="admin__user_avatar">
+                                        <img src="{{ asset('img/NEW/user.svg') }}">
+                                    </div>
+                                    <div class="admin__review_user-info">
+                                        <div class="admin__review_user-header">
+                                            <div class="admin__review_user-name">
+                                                {{ complaint.client.user.firstname ~ ' ' ~ complaint.client.user.lastname }}
+                                            </div>
+                                            <div class="admin__review_status {{ complaint.status }}">{{ complaint.status }}</div>
+                                        </div>
+                                        <div class="admin__review_user-body">
+                                            {{ complaint.client.city }}
+                                        </div>
+                                    </div>
+                                </div>
+                                <button class="order__block-right">
+                                    <img src="{{ asset('build/images/actions.svg') }}">
+                                    <div class="dropdown">
+                                        {% if complaint.status == 'pending' %}
+                                            <a href="{{ path('order', {'id': complaint.review.reviewedOrder.id}) }}">Doc</a>
+                                            <a href="{{ path('complaint_confirm', {'id': complaint.id}) }}">Confirm</a>
+                                            <a href="{{ path('complaint_decline', {'id': complaint.id}) }}">Decline</a>
+                                        {% else %}
+                                            <a href="#">Remove</a>
+                                        {% endif %}
+                                    </div>
+                                </button>
+                            </div>
+                            <div class="admin__review_body">
+                                {{ complaint.text }}
+                            </div>
+                            <div class="order__block-line"></div>
+                        </div>
+                    {% endfor %}
+                </div>
+                <div class="performers__pagination_block">
+                    {{ knp_pagination_render(complaints) }}
+                    {% if complaints|length > 10 %}
+                        <form class="performers__pagination_go" method="post" action="{{ path('admin_complaintsgo') }}"
+                              id="go">
+                            <div class="performers__pagination_go-page">Go to page:</div>
+                            <input type="text" name="page " class="performers__pagination_go-input">
+                            <button type="submit" class="performers__pagination_go-btn">Go</button>
+                        </form>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script>
+      document.querySelectorAll('.profile__data-filter').forEach(button => {
+        button.addEventListener('click', function () {
+          dropdown(button);
+
+          Array.from(document.getElementsByClassName('profile__data-filter')).forEach(btn => {
+            const img = btn.childNodes[1];
+            if ((btn !== button) && (img.src.indexOf('activeFilter.svg') !== -1)) {
+              btn.style.background = '#FFFFFF';
+              img.src = "{{ asset('build/images/filter.svg') }}";
+            }
+          });
+
+          const img = button.childNodes[1];
+          if (img.src.indexOf('filter.svg') !== -1) {
+            button.style.background = '#035FFE';
+            img.src = "{{ asset('build/images/activeFilter.svg') }}";
+          } else if (img.src.indexOf('activeFilter.svg') !== -1) {
+            button.style.background = '#FFFFFF';
+            img.src = "{{ asset('build/images/filter.svg') }}";
+          }
+
+          Array.from(document.getElementsByClassName('order__block-right')).forEach(btn => {
+            const img = btn.childNodes[1];
+            if (img.src.indexOf('activeActions.svg') !== -1) {
+              btn.style.background = '#FFFFFF';
+              img.src = "{{ asset('build/images/actions.svg') }}";
+            }
+          });
+        });
+      });
+
+      Array.from(document.getElementsByClassName('order__block-right')).forEach(button => {
+        button.addEventListener('click', function () {
+          dropdown(button);
+
+          Array.from(document.getElementsByClassName('order__block-right')).forEach(btn => {
+            const img = btn.childNodes[1];
+            if ((btn !== button) && (img.src.indexOf('activeActions.svg') !== -1)) {
+              btn.style.background = '#FFFFFF';
+              img.src = "{{ asset('build/images/actions.svg') }}";
+            }
+          });
+
+          const img = button.childNodes[1];
+          if (img.src.indexOf('actions.svg') !== -1) {
+            button.style.background = '#035FFE';
+            img.src = "{{ asset('build/images/activeActions.svg') }}";
+          } else if (img.src.indexOf('activeActions.svg') !== -1) {
+            button.style.background = '#FFFFFF';
+            img.src = "{{ asset('build/images/actions.svg') }}";
+          }
+
+          Array.from(document.getElementsByClassName('profile__data-filter')).forEach(btn => {
+            const img = btn.childNodes[1];
+            if (img.src.indexOf('activeFilter.svg') !== -1) {
+              btn.style.background = '#FFFFFF';
+              img.src = "{{ asset('build/images/filter.svg') }}";
+            }
+          });
+        });
+      });
+
+      function dropdown(button) {
+        Array.from(document.getElementsByClassName('dropdown')).forEach(dropdown => {
+          if ((button.childNodes[3] !== dropdown) && (dropdown.style.display === 'block')) {
+            dropdown.style.display = 'none';
+          }
+        });
+
+        let display = button.childNodes[3].style.display;
+        if (display && display === 'none') {
+          button.childNodes[3].style.display = 'block';
+        } else if (display === 'block') {
+          button.childNodes[3].style.display = 'none';
+        } else {
+          button.childNodes[3].style.display = 'block';
+        }
+      }
+
+      document.getElementById('reviewsShow').addEventListener('click', function () {
+        this.className = '';
+        document.getElementById('complaintsShow').className = 'not-active';
+        document.getElementById('reviews').style.display = 'block';
+        document.getElementById('complaints').style.display = 'none';
+      });
+
+      document.getElementById('complaintsShow').addEventListener('click', function () {
+        this.className = '';
+        document.getElementById('reviewsShow').className = 'not-active';
+        document.getElementById('reviews').style.display = 'none';
+        document.getElementById('complaints').style.display = 'block';
+      });
+    </script>
+{% endblock %}

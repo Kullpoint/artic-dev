@@ -1,0 +1,33 @@
+<div class="performer__info_block">
+    <div class="performer__info_main">
+        <div class="profile__user_avatar">
+            {% if performer.avatar %}
+                <img src="{{ asset('uploads/avatars/' ~ performer.avatar) }}">
+            {% else %}
+                <img src="{{ asset('img/NEW/user.svg') }}">
+            {% endif %}
+        </div>
+        <div class="profile__user_info">
+            <div class="profile__user_info-name">{{ performer.user.lastname }} {{ performer.user.firstname }}</div>
+            <div class="profile__user_info-text">Age: {{ performer.age }}</div>
+            <div class="profile__user_info-text">{{ performer.city }}, {{ performer.country }}</div>
+            <div class="profile__user_info-text">Birthday: {{ performer.birthday|date("d.m.Y") }}</div>
+        </div>
+    </div>
+    <div class="performer__info_rate">
+{#        <button class="performer__info_rate-favourite">#}
+{#            <img src="{{ asset('build/images/favourite.svg') }}">#}
+{#        </button>#}
+        <div class="performer__info_rate-rating">
+            <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+            <div class="performer__info_rate-mark">{{ performer.rating }}</div>
+        </div>
+        <div class="performer__info_rate-votes">{{ performer.reviews|length }} votes</div>
+    </div>
+</div>
+<div class="performers__item_types">
+    <div class="performer__type_ready">Categories</div>
+    {% for category in performer.categories %}
+        <div class="performers__item_type">{{ category.topic }}</div>
+    {% endfor %}
+</div>

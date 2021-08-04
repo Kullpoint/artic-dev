@@ -1,0 +1,185 @@
+{% extends 'admin/base.html.twig' %}
+
+{% block title %}Transactions{% endblock %}
+
+{% block adminBody %}
+    <div class="admin">
+        <div class="profile__data_title">
+            Transactions
+            <div class="profile__data-filter">
+                <img src="{{ asset('build/images/filter.svg') }}">
+                <div class="dropdown">
+                    <a href="{{ path('admin_transactions', {'filter': 'sender'}) }}">By Sender</a>
+                    <a href="{{ path('admin_transactions', {'filter': 'order'}) }}">By Order</a>
+                    <a href="{{ path('admin_transactions', {'filter': 'status'}) }}">By Status</a>
+                </div>
+            </div>
+        </div>
+        <div class="admin__container">
+            <div class="admin__transactions">
+                {% for transaction in transactions %}
+                    <div class="admin__transaction">
+                        <div class="admin__review_header">
+                            <div class="admin__review_user">
+                                <div class="admin__user_avatar">
+                                    <img src="{{ asset('img/NEW/user.svg') }}">
+                                </div>
+                                <div class="admin__review_user-info">
+                                    <div class="admin__review_user-header">
+                                        <div class="admin__review_user-name">
+                                            {{ transaction.sender.user.firstname ~ ' ' ~ transaction.sender.user.lastname }}
+                                        </div>
+                                    </div>
+                                    <div class="admin__review_user-body">
+                                        Sender
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="admin__review_user">
+                                <img src="{{ asset('build/images/arrow.svg') }}">
+                            </div>
+                            <div class="admin__review_user">
+                                <div class="admin__user_avatar">
+                                    <img src="{{ asset('img/NEW/user.svg') }}">
+                                </div>
+                                <div class="admin__review_user-info">
+                                    <div class="admin__review_user-header">
+                                        <div class="admin__review_user-name">
+                                            {{ transaction.receiver.user.firstname ~ ' ' ~ transaction.receiver.user.lastname }}
+                                        </div>
+                                    </div>
+                                    <div class="admin__review_user-body">
+                                        Receiver
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="admin__review_user">
+                                <div class="admin__review_user-info">
+                                    <div class="admin__review_user-header">
+                                        <div class="order__block-price transaction">
+                                            €{{ transaction.amount }}
+                                        </div>
+                                    </div>
+                                    <div class="admin__review_user-body">
+                                        Amount
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="admin__review_user">
+                                <div class="admin__review_user-info">
+                                    <div class="admin__review_user-header">
+                                        <div class="order__block-price transaction">
+                                            €{{ transaction.commission }}
+                                        </div>
+                                    </div>
+                                    <div class="admin__review_user-body">
+                                        Commission
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="order__block-right">
+                                <img src="{{ asset('build/images/actions.svg') }}">
+                                <div class="dropdown">
+                                    <a href="#">Remove</a>
+                                </div>
+                            </button>
+                        </div>
+                        <div class="order__block-line"></div>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="performers__pagination_block">
+                {{ knp_pagination_render(transactions) }}
+                {% if transactions|length > 10 %}
+                    <form class="performers__pagination_go" method="post" action="{{ path('admin_transactionsgo') }}" id="go">
+                        <div class="performers__pagination_go-page">Go to page:</div>
+                        <input type="text" name="page " class="performers__pagination_go-input">
+                        <button type="submit" class="performers__pagination_go-btn">Go</button>
+                    </form>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script>
+      document.querySelectorAll('.profile__data-filter').forEach( button => {
+        button.addEventListener('click', function () {
+          dropdown(button);
+
+          Array.from(document.getElementsByClassName('profile__data-filter')).forEach( btn => {
+            const img = btn.childNodes[1];
+            if ((btn !== button) && (img.src.indexOf('activeFilter.svg') !== -1)) {
+              btn.style.background = '#FFFFFF';
+              img.src = "{{ asset('build/images/filter.svg') }}";
+            }
+          });
+
+          const img = button.childNodes[1];
+          if (img.src.indexOf('filter.svg') !== -1) {
+            button.style.background = '#035FFE';
+            img.src = "{{ asset('build/images/activeFilter.svg') }}";
+          } else if (img.src.indexOf('activeFilter.svg') !== -1) {
+            button.style.background = '#FFFFFF';
+            img.src = "{{ asset('build/images/filter.svg') }}";
+          }
+
+          Array.from(document.getElementsByClassName('order__block-right')).forEach( btn => {
+            const img = btn.childNodes[1];
+            if (img.src.indexOf('activeActions.svg') !== -1) {
+              btn.style.background = '#FFFFFF';
+              img.src = "{{ asset('build/images/actions.svg') }}";
+            }
+          });
+        });
+      });
+
+      Array.from(document.getElementsByClassName('order__block-right')).forEach( button => {
+        button.addEventListener('click', function () {
+          dropdown(button);
+
+          Array.from(document.getElementsByClassName('order__block-right')).forEach( btn => {
+            const img = btn.childNodes[1];
+            if ((btn !== button) && (img.src.indexOf('activeActions.svg') !== -1)) {
+              btn.style.background = '#FFFFFF';
+              img.src = "{{ asset('build/images/actions.svg') }}";
+            }
+          });
+
+          const img = button.childNodes[1];
+          if (img.src.indexOf('actions.svg') !== -1) {
+            button.style.background = '#035FFE';
+            img.src = "{{ asset('build/images/activeActions.svg') }}";
+          } else if (img.src.indexOf('activeActions.svg') !== -1) {
+            button.style.background = '#FFFFFF';
+            img.src = "{{ asset('build/images/actions.svg') }}";
+          }
+
+          Array.from(document.getElementsByClassName('profile__data-filter')).forEach( btn => {
+            const img = btn.childNodes[1];
+            if (img.src.indexOf('activeFilter.svg') !== -1) {
+              btn.style.background = '#FFFFFF';
+              img.src = "{{ asset('build/images/filter.svg') }}";
+            }
+          });
+        });
+      });
+
+      function dropdown(button) {
+        Array.from(document.getElementsByClassName('dropdown')).forEach( dropdown => {
+          if ((button.childNodes[3] !== dropdown) && (dropdown.style.display === 'block')) {
+            dropdown.style.display = 'none';
+          }
+        });
+
+        let display = button.childNodes[3].style.display;
+        if (display && display === 'none') {
+          button.childNodes[3].style.display = 'block';
+        } else if (display === 'block') {
+          button.childNodes[3].style.display = 'none';
+        } else {
+          button.childNodes[3].style.display = 'block';
+        }
+      }
+    </script>
+{% endblock %}

@@ -1,0 +1,113 @@
+<div class="performers__result">
+    <div class="performers__result_count">
+        Showing 1 - {{ performers|length }} out of {% if total > 1000 %} 1000+ {% else %} {{ total }} {% endif %} results
+    </div>
+    <form id="sortForm" class="performers__result_sort">
+        <p>Sort by:</p>
+        <select id="sortBy">
+            {% if (sortBy == 'None') %}
+                <option selected>None</option>
+                <option>Most popular</option>
+                <option>Highest rating</option>
+                <option>More votes</option>
+            {% elseif (sortBy == 'Most popular') %}
+                <option>None</option>
+                <option selected>Most popular</option>
+                <option>Highest rating</option>
+                <option>More votes</option>
+            {% elseif (sortBy == 'Highest rating') %}
+                <option>None</option>
+                <option>Most popular</option>
+                <option selected>Highest rating</option>
+                <option>More votes</option>
+            {% elseif (sortBy == 'More votes') %}
+                <option>None</option>
+                <option>Most popular</option>
+                <option>Highest rating</option>
+                <option selected>More votes</option>
+            {% endif %}
+        </select>
+    </form>
+</div>
+<div class="performers__items">
+    {% for performer in performers %}
+        <a href="{{ path('performer', {'id': performer.id}) }}" class="performers__item">
+            <div class="performers__item_main">
+                <div class="performers__item_avatar">
+                    {% if performer.avatar %}
+                        <img src="{{ asset('uploads/avatars/' ~ performer.avatar) }}">
+                    {% else %}
+                        <img src="{{ asset('img/NEW/user.svg') }}">
+                    {% endif %}
+                </div>
+                <div class="performers__item_info">
+                    <div class="performers__item_info-name">{{ performer.user.firstname }} {{ performer.user.lastname }}</div>
+                    <div class="performers__item_info-experience">Experience: {{ performer.experience }} years</div>
+                    <div class="performers__item_info-experience">{{ performer.age }} age</div>
+                </div>
+            </div>
+            <div class="performers__item_types">
+                {% for category in performer.categories %}
+                    <div class="performers__item_type">{{ category.topic }}</div>
+                {% endfor %}
+            </div>
+            <div class="performers__item_additionally">
+                <div class="performers__item_rating">
+                    <div class="performers__item_rate">
+                        <img src="{{ asset('build/images/rateStar.svg') }}">
+                        <img src="{{ asset('build/images/rateStar.svg') }}">
+                        <img src="{{ asset('build/images/rateStar.svg') }}">
+                        <img src="{{ asset('build/images/rateStar.svg') }}">
+                        <img src="{{ asset('build/images/rateStar.svg') }}">
+                    </div>
+                    <div class="performers__item_votes">{{ performer.reviews|length }} votes</div>
+                </div>
+                <div class="performers__item_go">
+                    <img src="{{ asset('build/images/arrow.svg') }}">
+                </div>
+            </div>
+        </a>
+    {% endfor %}
+</div>
+<div class="performers__pagination_block">
+    {{ knp_pagination_render(performers) }}
+    <form class="performers__pagination_go" method="post" action="{{ path('performergo') }}" id="go">
+        <div class="performers__pagination_go-page">Go to page:</div>
+        <input type="text" name="page " class="performers__pagination_go-input">
+        <button type="submit" class="performers__pagination_go-btn">Go</button>
+    </form>
+</div>
+{% block javascripts %}
+    <script type="text/javascript">
+        $('#sortForm').on('change', function () {
+            var formData = {
+                'rating'           : $('#filter_performers_rating').val(),
+                'topic'            : $('#filter_performers_topic').val(),
+                'experience'       : $('#filter_performers_experience').val(),
+                'summeryTypes'     : $('#filter_performers_summeryTypes').val(),
+                'sortBy'           : $('#sortBy').val(),
+            };
+            $.ajax({
+                url: "/filterPerformers",
+                data: formData,
+                type: 'POST',
+                success: function (data) {
+                    $('#performers').html(data);
+                }
+            })
+        });
+
+        if (document.getElementsByClassName('performers__item').length < 36) {
+            document.getElementById('go').style.display = 'none';
+        }
+
+        Array.from(document.getElementsByClassName('performers__item')).forEach(item => {
+            item.onmouseenter = function () {
+                item.childNodes[5].childNodes[3].childNodes[1].src = "{{ asset('build/images/whiteArrow.svg') }}";
+            };
+            item.onmouseleave = function () {
+                item.childNodes[5].childNodes[3].childNodes[1].src = "{{ asset('build/images/arrow.svg') }}";
+            };
+        });
+    </script>
+{% endblock %}

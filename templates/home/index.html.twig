@@ -1,0 +1,59 @@
+{% extends 'base.html.twig' %}
+{% set route = app.request.attributes.get('_route') %}
+
+{% block stylesheets %}
+    {{ parent() }}
+    <link rel="stylesheet" href="{{ asset('build/css/mainPage.css') }}">
+{% endblock %}
+
+{% block title %}Welcome!{% endblock %}
+
+{% block body %}
+    {# ========================================================== Hero section ========================================================= #}
+    {% include 'home/sectionHero.html.twig' %}
+    {# ================================================================================================================================= #}
+
+    {# ======================================================= Categories section ====================================================== #}
+    {% include 'home/sectionCategories.html.twig' %}
+    {# ================================================================================================================================= #}
+
+    {# ======================================================== Authors section ======================================================== #}
+    {% include 'home/sectionAuthors.html.twig' %}
+    {# ================================================================================================================================= #}
+
+    {# ========================================================= About section ========================================================= #}
+    {% include 'home/sectionAbout.html.twig' %}
+    {# ================================================================================================================================= #}
+
+    {# ======================================================== Footer section ========================================================= #}
+    {% include 'layouts/footer.html.twig' %}
+    {# ================================================================================================================================= #}
+{% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script src="{{ asset('js/mainPage.js') }}"></script>
+
+    {# Delete me later #}
+    <script type="text/javascript">
+        {# document.getElementById('headerSearch').style = 'display: none;';
+        document.getElementById('content').style = 'padding: 0;';
+        document.getElementById('homeMenu').style = 'display: block;';
+
+        document.addEventListener('click', function () {
+            document.getElementById('headerSearch').style = 'display: none;';
+            if (document.getElementById('content').style.display !== 'none') {
+                document.getElementById('content').style = 'padding: 0;';
+            }
+        });
+
+        Array.from(document.getElementsByClassName('performers__item')).forEach(item => {
+            item.onmouseenter = function () {
+                item.childNodes[5].childNodes[3].childNodes[1].src = "{{ asset('images/whiteArrow.svg') }}";
+            };
+            item.onmouseleave = function () {
+                item.childNodes[5].childNodes[3].childNodes[1].src = "{{ asset('images/arrow.svg') }}";
+            };
+        }); #}
+    </script>
+{% endblock %}

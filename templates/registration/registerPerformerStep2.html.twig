@@ -1,0 +1,133 @@
+{% extends 'security/base.html.twig' %}
+
+{% block title %}Register{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="auth">
+            <div class="auth__part">
+                <div class="auth__part_block">
+                    <div class="auth__part_block-name">
+                        <a href="{{ path('home') }}">Artic</a>
+                    </div>
+                    <div class="auth__part_block-title">
+                        Sing up to Artic
+                    </div>
+                    <div class="auth__part_block-account">
+                        Already have an account? <a href="{{ path('app_login') }}">Log in.</a>
+                    </div>
+
+                    {% for flashError in app.flashes('verify_email_error') %}
+                        <div class="alert alert-danger" role="alert">{{ flashError }}</div>
+                    {% endfor %}
+
+                    {{ form_start(registrationForm, {'attr': {'class': 'auth__form'}}) }}
+                    <div class="auth__form-inputs">
+                        <div class="auth__form-block-inputs">
+                            <div class="auth__form-block-inputs-block" id="ava">
+                                {{ form_label(registrationForm.avatar) }}
+                                {{ form_widget(registrationForm.avatar, {'attr': {'class': 'auth__form-block-avatar'}}) }}
+                                <div class="auth__form-block-add">
+                                    <div class="auth__form-block-add-text" id="avaName">
+                                        Add avatar
+                                    </div>
+                                    <div class="auth__form-block-add-avatar">
+                                        <img id="img" src="{{ asset('build/images/add.svg') }}">
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="auth__form-block-inputs-block">
+                                {{ form_label(registrationForm.birthday) }}
+                                {{ form_widget(registrationForm.birthday, {'attr': {'class': 'auth__form-block-date'}}) }}
+                            </div>
+                        </div>
+                        <div class="auth__form-block">
+                            {{ form_label(registrationForm.specialization) }}
+                            {{ form_widget(registrationForm.specialization, {'attr': {'class': 'auth__form-block-select'}}) }}
+                        </div>
+                        <div class="auth__form-block-inputs">
+                            <div class="auth__form-block-inputs-block">
+                                {{ form_label(registrationForm.summeryTypes) }}
+                                {{ form_widget(registrationForm.summeryTypes, {'attr': {'class': 'auth__form-block-select'}}) }}
+                            </div>
+                            <div class="auth__form-block-inputs-block">
+                                {{ form_label(registrationForm.experience) }}
+                                {{ form_widget(registrationForm.experience, {'attr': {'class': 'auth__form-block-input'}}) }}
+                            </div>
+                        </div>
+                        <div class="auth__form-checkboxes">
+                            <div class="auth__form-checkboxes-checkbox">
+                                {{ form_widget(registrationForm.agree) }}
+                                <p>By creating an account, I agree with <a href="#">Privacy Policy and Terms</a> of <a href="#">Service</a>.</p>
+                            </div>
+                            <div class="auth__form-checkboxes-checkbox">
+                                {{ form_widget(registrationForm.sendEmail) }}
+                                <p>Yes, I would like to receive emails with great content and updates. (Optional)</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="auth__form-btns">
+                        <button type="submit" class="auth__form-btn-main">Register now</button>
+                    </div>
+                    {{ form_end(registrationForm) }}
+                </div>
+            </div>
+            <div class="auth__image">
+                <img class="auth__image_img" src="{{ asset('build/images/student.svg') }}">
+            </div>
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js" integrity="sha512-bLT0Qm9VnAYZDflyKcBaQ2gg0hSYNQrJ8RilYldYQ1FxQYoCLtUjuuRuZo+fjqhx/qtq/1itJ0C2ejDxltZVFg==" crossorigin="anonymous"></script>
+    <script src="https://unpkg.com/multiple-select@1.5.2/dist/multiple-select.min.js"></script>
+
+    <script type="text/javascript">
+        $('select[multiple="multiple"]').multipleSelect();
+
+        var previewFile = function () {
+            var preview = document.getElementById('img');
+            var file    = document.querySelector('input[type=file]').files[0];
+            var reader  = new FileReader();
+
+            reader.onloadend = function () {
+                preview.src = reader.result;
+            };
+
+            if (file) {
+                preview.classList.add('auth__form-block-add-image');
+                reader.readAsDataURL(file);
+                $('#avaName').html('Change avatar');
+            } else {
+                preview.src = "{{ asset('build/images/add.svg') }}";
+            }
+        };
+
+        $('.auth__form-block-add').on('click', function () {
+            $('#registration_performer_form_avatar').click();
+            setInterval(previewFile, 1);
+            return false;
+        });
+
+        function setInputFilter(textbox, inputFilter) {
+            ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop"].forEach(function(event) {
+                textbox.addEventListener(event, function() {
+                    if (inputFilter(this.value)) {
+                        this.oldValue = this.value;
+                        this.oldSelectionStart = this.selectionStart;
+                        this.oldSelectionEnd = this.selectionEnd;
+                    } else if (this.hasOwnProperty("oldValue")) {
+                        this.value = this.oldValue;
+                        this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+                    } else {
+                        this.value = "";
+                    }
+                });
+            });
+        }
+
+        setInputFilter(document.getElementById("registration_performer_form_experience"), function(value) {
+            return /^\d*\.?\d*$/.test(value); // Allow digits and '.' only, using a RegExp
+        });
+    </script>
+{% endblock %}

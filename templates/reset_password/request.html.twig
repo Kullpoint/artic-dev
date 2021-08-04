@@ -1,0 +1,65 @@
+{% extends 'security/base.html.twig' %}
+
+{% block title %}Reset your password{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="auth">
+            <div class="auth__part">
+                <div class="auth__part_block">
+                    <div class="auth__part_block-name">
+                        <a href="{{ path('performers') }}">Artic</a>
+                    </div>
+                    <div class="auth__part_block_data">
+                        <div class="auth__part_block-title">
+                            Reset password
+                        </div>
+                        <div class="auth__part_block-account">
+                            Don’t have an account yet? <a href="{{ path('app_register') }}">Create an account.</a>
+                        </div>
+                        {{ form_start(requestForm, {'attr': {'class': 'auth__form'}}) }}
+                        {% for flashError in app.flashes('reset_password_error') %}
+                            <div
+                                class="alert alert-danger">{{ flashError.messageKey|trans(flashError.messageData, 'security') }}</div>
+                        {% endfor %}
+                        {% if app.user %}
+                            <div class="mb-3">
+                                You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+                            </div>
+                        {% endif %}
+                        <div class="auth__form-inputs">
+                            <div class="auth__form-block">
+                                {{ form_errors(requestForm.email) }}
+                                {{ form_label(requestForm.email) }}
+                                {{ form_widget(requestForm.email, {'attr': { 'class': 'auth__form-block-input'}}) }}
+                            </div>
+                        </div>
+                        <div class="auth__form-btns">
+                            <button type="submit" class="auth__form-btn-main">Send email</button>
+                        </div>
+                        {{ form_end(requestForm) }}
+                    </div>
+                </div>
+            </div>
+            <div class="auth__image">
+                <img class="auth__image_img" src="{{ asset('build/images/student.svg') }}">
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        Array.from(document.getElementsByClassName('pass')).forEach(img => {
+            img.addEventListener('click', function () {
+                if (img.src.indexOf('notActivePass.svg') !== -1) {
+                    img.src = "{{ asset('build/images/activePass.svg') }}";
+                    this.parentNode.childNodes[5].type = 'text';
+                } else {
+                    img.src = "{{ asset('build/images/notActivePass.svg') }}";
+                    this.parentNode.childNodes[5].type = 'password';
+                }
+            });
+        });
+    </script>
+{% endblock %}

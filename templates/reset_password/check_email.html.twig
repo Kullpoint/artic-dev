@@ -1,0 +1,45 @@
+{% extends 'security/base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="auth">
+            <div class="auth__part">
+                <div class="auth__part_block">
+                    <div class="auth__part_block-name">
+                        <a href="{{ path('performers') }}">Artic</a>
+                    </div>
+                    <div class="auth__part_block_data">
+                        <div class="auth__part_block-title">
+                            Reset password
+                        </div>
+                        <div class="auth__part_block-account">
+                            <p>An email has been sent that contains a link that you can click to reset your password. This link will expire in {{ tokenLifetime|date('g') }} hour(s).</p>
+                            <p>If you don't receive an email please check your spam folder or <a href="{{ path('app_forgot_password_request') }}">try again</a>.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="auth__image">
+                <img class="auth__image_img" src="{{ asset('build/images/student.svg') }}">
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        Array.from(document.getElementsByClassName('pass')).forEach(img => {
+            img.addEventListener('click', function () {
+                if (img.src.indexOf('notActivePass.svg') !== -1) {
+                    img.src = "{{ asset('build/images/activePass.svg') }}";
+                    this.parentNode.childNodes[5].type = 'text';
+                } else {
+                    img.src = "{{ asset('build/images/notActivePass.svg') }}";
+                    this.parentNode.childNodes[5].type = 'password';
+                }
+            });
+        });
+    </script>
+{% endblock %}

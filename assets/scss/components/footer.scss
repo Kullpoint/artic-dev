@@ -1,0 +1,122 @@
+.section-footer {
+    width: 100%;
+    padding-top: $spacing-90px;
+    padding-bottom: $spacing-30px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    
+    &__wrapper {
+        width: 100%;
+        max-width: $max-width-sectionInner;
+        margin-bottom: $spacing-50px;
+        display: flex;
+        justify-content: space-between;
+    }
+
+    &__left {
+        width: 100%;
+        max-width: 330px;
+    }
+
+    &__right {
+        display: flex;
+    }
+
+    &__title {
+        margin-bottom: $spacing-60px;
+        line-height: $line-height-142p;
+    }
+
+    &__account {
+        display: flex;
+        align-items: center;
+    }
+
+    &__login,
+    &__register {
+        display: block;
+        color: $dark;
+        cursor: pointer;
+        transition: color .2s ease;
+
+        &:hover {
+            color: $primary;
+        }
+    }
+
+    &__login {
+        margin-right: $spacing-30px;
+    }
+
+    &__register {
+
+    }
+
+    &__nav {
+        width: 100%;
+        max-width: 210px;
+        
+        &:first-child {
+            margin-right: $spacing-150px;
+        }
+    }
+
+    .nav {
+        &__title {
+            margin-bottom: $spacing-25px;
+        }
+
+        &__item {
+            width: fit-content;
+            margin-top: $spacing-15px;
+            margin-bottom: $spacing-15px;
+            display: block;
+            color: $dark;
+            transition: color .2s ease;
+
+            &:hover {
+                color: $primary;
+            }
+
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+
+    .new-nav__title {
+        margin-top: $spacing-40px;
+    }
+
+    &__bottom {
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+    }
+
+    &__copyright {
+
+    }
+
+    &__bottom-nav {
+        display: flex;
+        align-items: center;
+        justify-content: flex-end;
+    }
+
+    .bottom-nav__item {
+        margin-right: $spacing-20px;
+        color: $dark;
+        transition: color .2s ease;
+
+        &:hover {
+            color: $primary;
+        }
+
+        &:last-child {
+            margin-right: 0;
+        }
+    }
+}

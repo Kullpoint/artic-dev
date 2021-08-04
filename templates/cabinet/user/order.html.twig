@@ -1,0 +1,76 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cabinet{% endblock %}
+
+{% block body %}
+<div class="profile center">
+    <div class="order">
+        {% include 'cabinet/orderLayout.html.twig' %}
+        <div class="order__data">
+            <div class="order__data-part">
+                <div class="order__data-part-data">
+                    <div class="order__header-title">Description</div>
+                    <div class="order__data-desc">{{ order.description }}</div>
+                </div>
+            </div>
+            <div class="order__data-part">
+                <div class="order__data-part-data">
+                    <div class="order__header-title">Requirements</div>
+                    <div class="order__data-desc">{{ order.requirements }}</div>
+                </div>
+            </div>
+        </div>
+        <div class="order__block-line comment"></div>
+        <div class="order__data">
+            {% if comments %}
+                <div class="order__data-part">
+                    <div class="order__data-part-data">
+                        <div class="order__header-title">Comments</div>
+                        <div id="comments">
+                            {% for comment in comments %}
+                                <div class="comment {{ app.user == comment.user ? 'me' : '' }}">
+                                    <div class="comment-title">{{ comment.user.firstname ~ ' ' ~ comment.user.lastname }}</div>
+                                    <div class="comment-text">{{ comment.comment }}</div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                    </div>
+                </div>
+            {% endif %}
+            <div class="profile__data_form-block comment">
+                <input id="comment" class="profile__data_form-block-input" placeholder="Add comment..">
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        $('#comment').on('change', function () {
+            $.ajax({
+                url: "/order/addComment",
+                data: {
+                    id: {{ order.id }},
+                    comment: $('#comment').val(),
+                },
+                type: 'POST',
+                success: function (data) {
+                    $('#comment').val('');
+                    $('#comments').html(data);
+                }
+            })
+        });
+        $('.delete').click(function (e) {
+            $.ajax({
+                url: "/order/deleteComment",
+                data: {
+                    id: this.id,
+                },
+                type: 'POST',
+                success: function () {
+                    e.target.parentNode.remove();
+                }
+            })
+        });
+    </script>
+{% endblock %}

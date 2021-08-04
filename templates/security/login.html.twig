@@ -1,0 +1,88 @@
+{% extends 'security/base.html.twig' %}
+
+{% block title %}Log in!{% endblock %}
+
+{% block body %}
+    <div class="container">
+        <div class="auth">
+            <div class="auth__part">
+                <div class="auth__part_block">
+                    <div class="auth__part_block-name">
+                        <a href="{{ path('home') }}">Artic</a>
+                    </div>
+                    <div class="auth__part_block_data">
+                        <div class="auth__part_block-title">
+                            Sing in to Artic
+                        </div>
+                        <div class="auth__part_block-account">
+                            Don’t have an account yet? <a href="{{ path('app_register') }}">Create an account.</a>
+                        </div>
+                        <form method="post" class="auth__form">
+                            {% if error %}
+                                <div
+                                    class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                            {% endif %}
+                            {% if app.user %}
+                                <div class="mb-3">
+                                    You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+                                </div>
+                            {% endif %}
+                            <div class="auth__form-inputs">
+                                <div class="auth__form-block">
+                                    <label for="email">Email</label>
+                                    <input type="email" value="{{ last_username }}" name="email" id="email"
+                                           class="auth__form-block-input" required autofocus>
+                                </div>
+                                <div class="auth__form-block">
+                                    <label for="password">Password</label>
+                                    <img src="{{ asset('build/images/notActivePass.svg') }}" class="pass">
+                                    <input type="password" name="password" id="password" class="auth__form-block-input"
+                                           required>
+                                </div>
+                                <input type="hidden" name="_csrf_token"
+                                       value="{{ csrf_token('authenticate') }}"
+                                >
+                            </div>
+                            <div class="auth__form-forgot">
+                                <a href="{{ path('app_forgot_password_request') }}">Forgot password?</a>
+                            </div>
+                            <div class="auth__form-btns">
+                                <button type="submit" class="auth__form-btn-main">Log in</button>
+                                <p class="auth__form-sign">or Sing in with</p>
+                                <div class="auth__form-buttons">
+                                    <a href="#" class="auth__form-button">
+                                        <img class="fab" src="{{ asset('build/images/google.svg') }}">
+                                        <p>Google</p>
+                                    </a>
+                                    <a href="{{ path('connect_facebook_start') }}" class="auth__form-button">
+                                        <img class="fab" src="{{ asset('build/images/facebook.svg') }}">
+                                        <p>Facebook</p>
+                                    </a>
+                                </div>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+            <div class="auth__image">
+                <img class="auth__image_img" src="{{ asset('build/images/student.svg') }}">
+            </div>
+        </div>
+    </div>
+
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        Array.from(document.getElementsByClassName('pass')).forEach(img => {
+            img.addEventListener('click', function () {
+                if (img.src.indexOf('notActivePass.svg') !== -1) {
+                    img.src = "{{ asset('build/images/activePass.svg') }}";
+                    this.parentNode.childNodes[5].type = 'text';
+                } else {
+                    img.src = "{{ asset('build/images/notActivePass.svg') }}";
+                    this.parentNode.childNodes[5].type = 'password';
+                }
+            });
+        });
+    </script>
+{% endblock %}

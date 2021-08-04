@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="uk" itemscope itemtype="http://schema.org/WebPage">
+    <head>
+        <meta charset="UTF-8">
+        
+        {# ======================================================== MICRODATA ========================================================== #}
+        {# Default #}
+        <meta name="title" content="VolRef">
+        <meta name="description" content="site description" >
+        <meta name="keywords" content="site keywords" >
+
+        {# Schema.org data #}
+        <meta itemprop="name" content="VolRef">
+        <meta itemprop="description" name="description" content="site description">
+        <meta itemprop="image" name="image" content="{{ asset('img/seo.jpg') }}">
+
+        {# Twitter Card data #}
+        <meta name="twitter:card" content="summary">
+        <meta name="twitter:site" content="@site.ua">
+        <meta name="twitter:title" content="VolRef">
+        <meta name="twitter:description" content="site description">
+        <meta name="twitter:creator" content="@site.ua">
+        <meta name="twitter:image" content="{{ asset('img/seo.jpg') }}">
+
+        {# Open Graph data #}
+        <meta property="og:locale" content="uk-UA">
+        <meta property="og:title" content="VolRef" />
+        <meta property="og:type" content="website" />
+        <meta property="og:url" content="https://site.ua" />
+        <meta property="og:image" content="{{ asset('img/seo.jpg') }}" />
+        <meta property="og:description" content="site description" />
+        <meta property="og:site_name" content="site.ua" />
+
+        {# Image for Social #}
+        <link rel="image_src" href="{{ asset('img/seo.jpg') }}">
+        {# ============================================================================================================================= #}
+
+        {# mobile optimization #}
+        <meta name="viewport" content="width=device-width, minimum-scale=1.0, maximum-scale=1.0, user-scalable=no">
+        <meta name="format-detection" content="telephone=no">
+        <meta name="format-detection" content="date=no">
+        <meta name="format-detection" content="address=no">
+        <meta name="format-detection" content="email=no">
+
+        {# google site verification #}
+        {# <meta name="google-site-verification" content="lYxPQHDbruU-8hGepTTqnb9XVtJfjfrrvL1EsgD086k" /> #}
+        
+        {# common #}
+        <title>Welcome!</title>
+        
+        {# styles #}
+        {% block stylesheets %}
+            {# <link rel="stylesheet" href="https://api.mapbox.com/mapbox-gl-js/v2.0.1/mapbox-gl.css"> #}
+            {# fonts #}
+            <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.3/css/all.min.css" referrerpolicy="no-referrer" />
+            {# shortcut icon #}
+                <link rel="shortcut icon" href="{{ asset('img/NEW/artic.png') }}" type="image/png">
+            {# slider #}
+            {# <link rel="stylesheet" href="https://unpkg.com/swiper/swiper-bundle.css"> #}
+        {% endblock %}
+    </head>
+    <body>
+        {% block body %}{% endblock %}
+
+        {% block javascripts %}
+            <script src="{{ asset('js/baseScript.js') }}"></script>
+        {% endblock %}
+    </body>
+</html>

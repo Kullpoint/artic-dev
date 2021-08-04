@@ -1,0 +1,50 @@
+<footer class="section-footer section-outer">
+    <div class="section-footer__wrapper">
+        <div class="section-footer__left">
+            <h2 class="section-footer__title text-fslb__bold">
+                The online video editor trusted by teams to make professional video in minutes.
+            </h2>
+            <div class="section-footer__account">
+                <a href="{{ path('app_login') }}" class="section-footer__login text-fsb__bold">
+                    Sing in
+                </a>
+                <a href="{{ path('app_register') }}" class="section-footer__register text-fsb__bold">
+                    Sing up
+                </a>
+            </div>
+        </div>
+        <div class="section-footer__right">
+            <nav class="section-footer__nav">
+                <div class="nav__title text-fsb__bold">Categories</div>
+                {# categories #}
+                {% for category in categories %}
+                    <a href="{{ path('performers', {'category': category.id}) }}" class="nav__item text-fsd__semibold">{{ category.topic }}</a>
+                {% endfor %}
+                
+            </nav>
+            <nav class="section-footer__nav">
+                {# links #}
+                <div class="nav__title text-fsb__bold">Website</div>
+                <a href="" class="nav__item text-fsd__semibold">About project</a>
+                <a href="" class="nav__item text-fsd__semibold">For advertisers</a>
+                <a href="" class="nav__item text-fsd__semibold">Feedback</a>
+                <a href="" class="nav__item text-fsd__semibold">Contacts</a>
+                {# languages #}
+                <div class="nav__title new-nav__title text-fsb__bold">Language</div>
+                {# style tag needs couse cyrillic words have bigger weight that english words #}
+                <a href="" class="nav__item text-fsd__semibold" style="font-weight: 500;">Українська</a>
+                <a href="" class="nav__item text-fsd__semibold" style="font-weight: 500;">Русский</a>
+                <a href="" class="nav__item text-fsd__semibold">English</a>
+            </nav>
+        </div>
+    </div>
+    <div class="section-footer__bottom">
+        <div class="section-footer__copyright text-fsm__regular">
+            © Referats, Inc · All rights reserved 2021
+        </div>
+        <nav class="section-footer__bottom-nav">
+            <a href="" class="bottom-nav__item text-fsm__regular">Terms</a>
+            <a href="" class="bottom-nav__item text-fsm__regular">Privacy</a>
+        </nav>
+    </div>
+</footer>

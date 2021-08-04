@@ -1,0 +1,88 @@
+<div class="section-authors">
+    <div class="section-authors__wrapper">
+        <h2 class="section-authors__title text-fssb__bold">Top authors</h2>
+        <div class="section-authors__container">
+            {# authors #}
+            {% for performer in performers %}
+                <a href="{{ path('performer', {'id': performer.id}) }}" class="section-authors__author">
+                    {# about #}
+                    <div class="author__about">
+                        {# photo #}
+                        {% if performer.avatar %}
+                            <img src="{{ asset('uploads/avatars/' ~ performer.avatar) }}" class="img">
+                        {% else %}
+                            <img src="{{ asset('img/NEW/user.svg') }}" class="img">
+                        {% endif %}
+                        {# info #}
+                        <div class="author__info">
+                            <div class="author__name text-fsb__bold">
+                                {{ performer.user.firstname }} 
+                                <br>
+                                {{ performer.user.lastname }}
+                            </div>
+                            <div class="author__experience text-fsm__semibold">
+                                Experience: {{ performer.experience }} years
+                            </div>
+                            {# !Чому тут age, а не ціна? #}
+                            <div class="author__age text-fsm__bold">
+                                {{ performer.age }} age
+                            </div>
+                            {# !======================== #}
+                        </div>
+                    </div>
+                    {# types #}
+                    <div class="author__types">
+                        {% for category in performer.categories %}
+                            <div class="author__type text-fsm__semibold">{{ category.topic }}</div>
+                        {% endfor %}
+                    </div>
+                    {# bottom #}
+                    <div class="author__bottom">
+                        <div class="author__rating">
+                            <div class="author__stars">
+                                {# !Доробити логіку. Наразі вона не показує рейтинг #}
+                                {% if performer.rating|round == 5 %}
+                                    <img src="{{ asset('img/rateActiveStar.svg') }}" class="star">
+                                    <img src="{{ asset('img/rateActiveStar.svg') }}" class="star">
+                                    <img src="{{ asset('img/rateActiveStar.svg') }}" class="star">
+                                    <img src="{{ asset('img/rateActiveStar.svg') }}" class="star">
+                                    <img src="{{ asset('img/rateActiveStar.svg') }}" class="star">
+                                {% elseif performer.rating|round == 4 %}
+                                    <img src="{{ asset('img/rateActiveStar.svg') }}" class="star">
+                                    <img src="{{ asset('img/rateActiveStar.svg') }}" class="star">
+                                    <img src="{{ asset('img/rateActiveStar.svg') }}" class="star">
+                                    <img src="{{ asset('img/rateActiveStar.svg') }}" class="star">
+                                    <img src="{{ asset('img/rateStar.svg') }}" class="star">
+                                {% elseif performer.rating|round == 3 %}
+                                    <img src="{{ asset('img/rateActiveStar.svg') }}" class="star">
+                                    <img src="{{ asset('img/rateActiveStar.svg') }}" class="star">
+                                    <img src="{{ asset('img/rateActiveStar.svg') }}" class="star">
+                                    <img src="{{ asset('img/rateStar.svg') }}" class="star">
+                                    <img src="{{ asset('img/rateStar.svg') }}" class="star">
+                                {% elseif performer.rating|round == 2 %}
+                                    <img src="{{ asset('img/rateActiveStar.svg') }}" class="star">
+                                    <img src="{{ asset('img/rateActiveStar.svg') }}" class="star">
+                                    <img src="{{ asset('img/rateStar.svg') }}" class="star">
+                                    <img src="{{ asset('img/rateStar.svg') }}" class="star">
+                                    <img src="{{ asset('img/rateStar.svg') }}" class="star">
+                                {% elseif performer.rating|round == 1 %}
+                                    <img src="{{ asset('img/rateActiveStar.svg') }}" class="star">
+                                    <img src="{{ asset('img/rateStar.svg') }}" class="star">
+                                    <img src="{{ asset('img/rateStar.svg') }}" class="star">
+                                    <img src="{{ asset('img/rateStar.svg') }}" class="star">
+                                    <img src="{{ asset('img/rateStar.svg') }}" class="star">
+                                {% endif %}
+                                {# !=============================================== #}
+                            </div>
+                            <div class="author__votes text-fsm__semibold">{{ performer.reviews|length }} votes</div>
+                        </div>
+                        <div class="author__arrow">
+                            <i class="fas fa-arrow-right"></i>
+                        </div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+        <a href="{{ path('performers') }}" class="section-authors__all text-fsb__bold">All authors</a>
+    </div>
+</div>

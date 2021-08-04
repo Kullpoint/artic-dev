@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block body %}
+  <div class="profile">
+    <div class="admin-menu">
+      {% if app.request.get('_route') == 'admin_users' %}
+        <a href="{{ path('admin_users') }}" class="admin-menu--item top active">Users</a>
+        <a href="{{ path('admin_performers') }}" class="admin-menu--item">Performers</a>
+        <a href="{{ path('admin_partners') }}" class="admin-menu--item">Partners</a>
+        <a href="{{ path('admin_reviews') }}" class="admin-menu--item">Reviews</a>
+        <a href="{{ path('admin_transactions') }}" class="admin-menu--item last-item">Transactions</a>
+      {% elseif app.request.get('_route') == 'admin_performers' %}
+        <a href="{{ path('admin_users') }}" class="admin-menu--item top">Users</a>
+        <a href="{{ path('admin_performers') }}" class="admin-menu--item active">Performers</a>
+        <a href="{{ path('admin_partners') }}" class="admin-menu--item">Partners</a>
+        <a href="{{ path('admin_reviews') }}" class="admin-menu--item">Reviews</a>
+        <a href="{{ path('admin_transactions') }}" class="admin-menu--item last-item">Transactions</a>
+      {% elseif app.request.get('_route') == 'admin_partners' %}
+        <a href="{{ path('admin_users') }}" class="admin-menu--item top">Users</a>
+        <a href="{{ path('admin_performers') }}" class="admin-menu--item">Performers</a>
+        <a href="{{ path('admin_partners') }}" class="admin-menu--item active">Partners</a>
+        <a href="{{ path('admin_reviews') }}" class="admin-menu--item">Reviews</a>
+        <a href="{{ path('admin_transactions') }}" class="admin-menu--item last-item">Transactions</a>
+      {% elseif app.request.get('_route') == 'admin_reviews' %}
+        <a href="{{ path('admin_users') }}" class="admin-menu--item top">Users</a>
+        <a href="{{ path('admin_performers') }}" class="admin-menu--item">Performers</a>
+        <a href="{{ path('admin_partners') }}" class="admin-menu--item">Partners</a>
+        <a href="{{ path('admin_reviews') }}" class="admin-menu--item active">Reviews</a>
+        <a href="{{ path('admin_transactions') }}" class="admin-menu--item last-item">Transactions</a>
+      {% elseif app.request.get('_route') == 'admin_transactions' %}
+        <a href="{{ path('admin_users') }}" class="admin-menu--item top">Users</a>
+        <a href="{{ path('admin_performers') }}" class="admin-menu--item">Performers</a>
+        <a href="{{ path('admin_partners') }}" class="admin-menu--item">Partners</a>
+        <a href="{{ path('admin_reviews') }}" class="admin-menu--item">Reviews</a>
+        <a href="{{ path('admin_transactions') }}" class="admin-menu--item last-item active">Transactions</a>
+      {% endif %}
+    </div>
+    {% block adminBody %}{% endblock %}
+  </div>
+{% endblock %}

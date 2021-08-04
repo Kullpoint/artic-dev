@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cabinet{% endblock %}
+
+{% block body %}
+    <div class="profile">
+        {% include 'cabinet/layout.html.twig' with {'changeData': false, 'edit': 'Edit profile', 'settings': 'Settings'} %}
+        {% include 'cabinet/partner/clients.html.twig' %}
+        <div class="profile__block">
+            <div class="profile__relative_data">
+                <div class="profile__data_title">
+                    {% if page == 'stats' %}
+                        Earnings
+                    {% else %}
+                        Transactions
+                    {% endif %}
+                </div>
+                <div class="profile__data_block">
+                    {% if transactions|length != 0 %}
+                        {% for transaction in transactions|slice(0, 3) %}
+                            <div class="transaction">
+                                <div class="order__block-parts">
+                                    <div class="order__block-left">
+                                        <div class="order__block-theme">{{ transaction.sender.user.firstname ~ ' ' ~ transaction.sender.user.lastname }}</div>
+                                        <div class="order__block-performer">{{ transaction.order.summeryType }}</div>
+                                    </div>
+                                    <div class="order__block-transaction">
+                                        <div class="order__block-price transaction">
+                                            {% if page == 'stats' %}
+                                                +€{{ transaction.amount }}
+                                            {% else %}
+                                                €{{ transaction.amount }}
+                                            {% endif %}
+                                        </div>
+                                        <div class="order__block-deadline">To {{ transaction.order.deadline|date('m.d.Y') }}</div>
+                                    </div>
+                                </div>
+                            </div>
+                        {% endfor %}
+                    {% else %}
+                        No transactions
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}

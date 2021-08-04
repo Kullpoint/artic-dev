@@ -1,0 +1,88 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Cabinet{% endblock %}
+
+{% block body %}
+    <div class="profile center">
+        <div class="order">
+            {% include 'cabinet/orderLayout.html.twig' %}
+            <div class="order__data">
+                <div class="order__data-part">
+                    <div class="order__data-part-data">
+                        <div class="order__header-title">Description</div>
+                        <div class="order__data-desc">{{ order.description }}</div>
+                    </div>
+                </div>
+                <div class="order__data-part">
+                    <div class="order__data-part-data">
+                        <div class="order__header-title">Requirements</div>
+                        <div class="order__data-desc">{{ order.requirements }}</div>
+                    </div>
+                    {% if order.status == 'confirmed' %}
+                        {{ form_start(form, {attr: {id: form.vars.id}}) }}
+                        <div>
+                            <div class="profile__data_form-block card">
+                                {{ form_label(form.amount) }}
+                                {{ form_widget(form.amount, {'attr': {'class': 'profile__data_form-block-input input', 'placeholder': order.price}}) }}
+                            </div>
+                        </div>
+                    </div>
+                    <div class="profile__data_form-block card" id="card">
+                        <label for="card-element">
+                            Credit or Debit Card
+                        </label>
+                        <div id="card-element" class="profile__data_form-block-input"></div>
+                        <div id="card-errors" class="help-block" role="alert"></div>
+                    </div>
+                    {{ form_widget(form.token) }}
+                    <div class="order__data_btns">
+                        <button class="order__data_btn confirm" type="submit">Confirm</button>
+                        <button class="order__data_btn decline"><a href="{{ path('order_reject', {id: order.id}) }}">Decline</a></button>
+                    </div>
+                    {{ form_end(form) }}
+                {% else %}
+                </div>
+            {% endif %}
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    {% if order.status == 'confirmed' %}
+    <script type="text/javascript">
+        var form = document.getElementById('{{ form.vars.id }}') ?? null;
+        if (form) {
+            console.log(123);
+        }
+        var errors = document.getElementById('card-errors');
+
+        var stripe = Stripe('{{ stripe_public_key }}');
+        var elements = stripe.elements();
+        var card = elements.create('card');
+
+        card.mount('#card-element');
+        card.addEventListener('change', function (event) {
+            if (event.error) {
+                errors.textContent = event.error.message;
+                form.classList.add('has-error');
+            } else {
+                errors.textContent = '';
+                form.classList.remove('has-error');
+            }
+        });
+
+        form.addEventListener('submit', function (event) {
+            event.preventDefault();
+
+            stripe.createToken(card).then(function (result) {
+                if (result.error) {
+                    errors.textContent = result.error.message;
+                    form.classList.add('has-error');
+                } else {
+                    document.getElementById('{{ form.children.token.vars.id }}').setAttribute('value', result.token.id);
+                    form.submit();
+                }
+            });
+        });
+    </script>
+    {% endif %}
+{% endblock %}

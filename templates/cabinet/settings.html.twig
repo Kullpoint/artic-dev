@@ -1,0 +1,162 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Settings{% endblock %}
+
+{% block body %}
+    <div class="profile">
+        {% include 'cabinet/layout.html.twig' with {'changeData': true, 'edit': 'Save', 'settings': 'Decline'} %}
+        <div class="profile__block">
+            {{ form_start(changeDataForm, {'attr': {'class': 'profile__data', 'id': 'changeDataForm'}}) }}
+                <div class="profile__data_title">Private data</div>
+                <div class="profile__data_form">
+                    <div class="profile__data_form-block">
+                        {{ form_errors(changeDataForm.firstname) }}
+                        {{ form_label(changeDataForm.firstname) }}
+                        {{ form_widget(changeDataForm.firstname, {'attr': {'class': 'profile__data_form-block-input input'}}) }}
+                    </div>
+                    <div class="profile__data_form-block">
+                        {{ form_errors(changeDataForm.lastname) }}
+                        {{ form_label(changeDataForm.lastname) }}
+                        {{ form_widget(changeDataForm.lastname, {'attr': {'class': 'profile__data_form-block-input input'}}) }}
+                    </div>
+                    <div class="profile__data_form-block">
+                        {{ form_errors(changeDataForm.email) }}
+                        {{ form_label(changeDataForm.email) }}
+                        {{ form_widget(changeDataForm.email, {'attr': {'class': 'profile__data_form-block-input input'}}) }}
+                    </div>
+                    <div class="profile__data_form-block">
+                        {{ form_errors(changeDataForm.phone) }}
+                        {{ form_label(changeDataForm.phone) }}
+                        {{ form_widget(changeDataForm.phone, {'attr': {'class': 'profile__data_form-block-input input'}}) }}
+                    </div>
+                    {% if app.user.performer or app.user.partner %}
+                        <div class="profile__data_form-block">
+                            {{ form_errors(changeDataForm.birthday) }}
+                            {{ form_label(changeDataForm.birthday) }}
+                            {{ form_widget(changeDataForm.birthday, {'attr': {'class': 'profile__data_form-block-input input'}}) }}
+                        </div>
+                    {% endif %}
+                    {% if not app.user.partner %}
+                        <div class="profile__data_form-block">
+                            {{ form_errors(changeDataForm.country) }}
+                            {{ form_label(changeDataForm.country) }}
+                            {{ form_widget(changeDataForm.country, {'attr': {'class': 'profile__data_form-block-select input'}}) }}
+                        </div>
+                        <div class="profile__data_form-block">
+                            {{ form_errors(changeDataForm.city) }}
+                            {{ form_label(changeDataForm.city) }}
+                            {{ form_widget(changeDataForm.city, {'attr': {'class': 'profile__data_form-block-input input'}}) }}
+                        </div>
+                    {% endif %}
+                </div>
+            {{ form_end(changeDataForm) }}
+        </div>
+        <div class="profile__block">
+            {{ form_start(changePassForm, {'attr': {'class': 'profile__data', 'id': 'changePassForm'}}) }}
+                <div class="profile__data_title">Password</div>
+                <div class="profile__data_form password">
+                    <div class="profile__data_form-block">
+                        {{ form_errors(changePassForm.oldPassword) }}
+                        {{ form_label(changePassForm.oldPassword) }}
+                        <img src="{{ asset('build/images/notActivePass.svg') }}" class="pass">
+                        {{ form_widget(changePassForm.oldPassword, {'attr': {'class': 'profile__data_form-block-input pass-input'}}) }}
+                    </div>
+                    <div class="profile__data_form-block">
+                        {{ form_errors(changePassForm.password) }}
+                        {{ form_label(changePassForm.password.first) }}
+                        <img src="{{ asset('build/images/notActivePass.svg') }}" class="pass">
+                        {{ form_widget(changePassForm.password.first, {'attr': {'class': 'profile__data_form-block-input pass-input'}}) }}
+                    </div>
+                    <div class="profile__data_form-block">
+                        {{ form_label(changePassForm.password.second) }}
+                        <img src="{{ asset('build/images/notActivePass.svg') }}" class="pass">
+                        {{ form_widget(changePassForm.password.second, {'attr': {'class': 'profile__data_form-block-input pass-input'}}) }}
+                    </div>
+                </div>
+            {{ form_end(changePassForm) }}
+        </div>
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        const avatarForm = document.getElementById('avatar');
+        const changeDataForm = document.getElementById('changeDataForm');
+
+        document.getElementById('edit').addEventListener('click', (e) => {
+            e.preventDefault();
+            if (changeDataForm.checkValidity()) {
+                changeDataForm.submit();
+            }
+        });
+
+        const form = document.getElementById('changePassForm');
+
+        document.querySelectorAll('.pass-input').forEach( input => {
+            input.addEventListener('change', function () {
+                if (form.checkValidity()) {
+                    form.submit();
+                }
+            });
+        });
+
+        if (document.getElementById('avatar_avatar')) {
+            avatarForm.addEventListener("mouseover", function () {
+                document.getElementById('camera').style.opacity = '1';
+            });
+
+            avatarForm.addEventListener("mouseout", function () {
+                document.getElementById('camera').style.opacity = '0';
+            });
+
+            document.getElementById('avatar_avatar').addEventListener('change', (e) => {
+                readURL(e.target);
+                avatarForm.submit();
+            });
+
+            function readURL(input) {
+                if (input.files && input.files[0]) {
+                    var reader = new FileReader();
+
+                    reader.onload = function (e) {
+                        document.getElementById('ava').src = e.target.result;
+                    };
+
+                    reader.readAsDataURL(input.files[0]);
+                }
+            }
+        }
+
+        document.querySelectorAll('.pass').forEach( img => {
+            img.addEventListener('click', function () {
+                if (img.src.indexOf('notActivePass.svg') !== -1) {
+                    img.src = "{{ asset('build/images/activePass.svg') }}";
+                    this.parentNode.childNodes[5].type = 'text';
+                } else {
+                    img.src = "{{ asset('build/images/notActivePass.svg') }}";
+                    this.parentNode.childNodes[5].type = 'password';
+                }
+            });
+        });
+
+        function setInputFilter(textbox, inputFilter) {
+            ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop"].forEach(function(event) {
+                textbox.addEventListener(event, function() {
+                    if (inputFilter(this.value)) {
+                        this.oldValue = this.value;
+                        this.oldSelectionStart = this.selectionStart;
+                        this.oldSelectionEnd = this.selectionEnd;
+                    } else if (this.hasOwnProperty("oldValue")) {
+                        this.value = this.oldValue;
+                        this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+                    } else {
+                        this.value = "";
+                    }
+                });
+            });
+        }
+
+        setInputFilter(document.getElementById("change_data_form_phone"), function(value) {
+            return /^\d*\.?\d*$/.test(value); // Allow digits and '.' only, using a RegExp
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,49 @@
+//Imports =====================================================================
+@import './variables.scss';
+@import './fonts.scss';
+@import './mixins.scss';
+@import './texts.scss';
+@import './normalize.scss';
+
+@import './components/index.scss';
+//=============================================================================
+
+//Common ======================================================================
+html {
+  font-size: $fontSizeMedium;
+  font-weight: 400;
+}
+
+body {
+  @include font-Nunito;
+  line-height: $line-height-100p;
+  background-color: $white;
+  color: $dark;
+  overflow-x: hidden;
+
+  &::-webkit-scrollbar {
+    width: 10px;
+    background-color: #f9f9fd;
+  }
+
+  &::-webkit-scrollbar-thumb {
+      border-radius: 10px;
+      background-color: $primary;
+  }
+
+  &::-webkit-scrollbar-track {
+      -webkit-box-shadow: inset 0 0 6px rgba(0,0,0,0.2);
+      border-radius: 10px;
+      background-color: #f9f9fd;
+  }
+}
+.section-outer {
+  padding-left: $spacing-60px;
+  padding-right: $spacing-60px;
+
+  // @media screen and (max-width: $mobile) {
+  //   padding-left: $spacing-20px;
+  //   padding-right: $spacing-20px;
+  // }
+}
+//=============================================================================

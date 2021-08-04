@@ -1,0 +1,216 @@
+//Adaptive ============================================================================================================
+$mobileSM:                                             380px;
+$mobile:                                               576px;
+$tablet:                                               768px;
+$tabletXL:                                             992px;
+
+$laptop:                                              1200px;
+$desktop:                                             1400px;
+$desktopXL:                                           1500px;
+//=====================================================================================================================
+
+//Colors ==============================================================================================================
+// $primaryLighten:                                   #FCF4F6;
+// $primaryLight:                                     #FFFFFF;
+$primary:                                          #035FFE;
+// $primaryDark:                                      #0D1C41;
+
+// $secondary:                                        #035FFE;
+
+//White color palette
+$white:                                            #FFFFFF;
+$darkWhite:                                        #E5E5E5;
+$darkenWhite:                                      #E6EFFF;
+
+//Silver color palette
+$lighterSilver:                                    #EBEBEB;
+$lightSilver:                                      #C9C8DA;
+// $silver:                                           #666666;
+
+//Dark color palette
+$lighterDark:                                      #263238;
+$lightDark:                                        #292929;
+$dark:                                             #000000;
+
+//Blue color palette
+$lighterBlue:                                      #E6EFFF;
+$lightBlue:                                        #00A4E1;
+// $blue:                                             #5879C5;
+$darkBlue:                                         #3B5998;
+
+//Yellow color palette
+// $yellow:                                           #FABC05;
+
+//Orange color palette
+$orange:                                           #FFC55C;
+
+//Green color palette
+$green:                                            #17D27F;
+
+//Purple color palette
+$lighterPurple:                                    #F3E7DD;
+
+//Violet color palette
+$lightViolet:                                      #A139E3;
+$violet:                                           #5800E4;
+
+//RGBA colors
+//white
+// $rgba-white-10:                   rgba(255, 255, 255, 0.1);
+
+//silver
+$rgba-silver-10:                    rgba(59, 89, 152, 0.1);
+
+//dark
+// $rgba-dark-30:                          rgba(0, 0, 0, 0.3);
+// $rgba-dark-50:                          rgba(0, 0, 0, 0.5);
+// $rgba-dark-70:                          rgba(0, 0, 0, 0.7);
+
+//blue
+$rgba-lightBlue-10:                 rgba(0, 164, 225, 0.1);
+
+//orange
+$rgba-orange-10:                   rgba(255, 197, 92, 0.1);
+
+//green
+$rgba-green-10:                    rgba(23, 210, 127, 0.1);
+
+//violet
+$rgba-lightViolet-10:              rgba(161, 57, 227, 0.1);
+$rgba-violet-10:                     rgba(88, 0, 228, 0.1);
+
+//box-shadows
+// $modals-shadow:                                                                   0px 10px 20px rgba(0, 0, 0, 0.15);
+$language-list-shadow:                                                            0px 5px 20px rgba(3, 95, 254, 0.3);
+$list-shadow:                                                                    0px 10px 20px rgba(3, 95, 254, 0.2);
+
+//filters
+// $drop-shadow-blue:                                               drop-shadow(0px 40px 80px rgba(66, 133, 244, 0.5));
+
+//Gradients
+$main-gradient:                                        linear-gradient(243.32deg, #F3E7DD 35.62%, #DDE7FA 118.28%);
+//=====================================================================================================================
+
+//Layout ==============================================================================================================
+$max-width-desktop:                                   1920px;
+$max-width-sectionInner:                              1410px;
+
+//Spacing
+$spacing-5px:                                            5px;
+$spacing-10px:                                          10px;
+$spacing-15px:                                          15px;
+$spacing-20px:                                          20px;
+$spacing-25px:                                          25px;
+$spacing-30px:                                          30px;
+$spacing-35px:                                          35px;
+$spacing-40px:                                          40px;
+
+$spacing-50px:                                          50px;
+$spacing-60px:                                          60px;
+$spacing-70px:                                          70px;
+$spacing-80px:                                          80px;
+$spacing-90px:                                          90px;
+
+$spacing-100px:                                        100px;
+$spacing-110px:                                        110px;
+$spacing-120px:                                        120px;
+$spacing-130px:                                        130px;
+$spacing-140px:                                        140px;
+$spacing-150px:                                        150px;
+$spacing-160px:                                        160px;
+$spacing-170px:                                        170px;
+$spacing-180px:                                        180px;
+$spacing-190px:                                        190px;
+
+$spacing-200px:                                        200px;
+$spacing-220px:                                        220px;
+$spacing-240px:                                        240px;
+$spacing-260px:                                        260px;
+$spacing-280px:                                        280px;
+
+$spacing-330px:                                        330px;
+$spacing-340px:                                        340px;
+$spacing-350px:                                        350px;
+$spacing-360px:                                        360px;
+//=====================================================================================================================
+
+//Fonts ===============================================================================================================
+$fontSizeSpecialButtonsBig:                             10px;
+
+$fontSizeMicroMedium:                                   11px;
+$fontSizeMicroBig:                                      13px;
+
+$fontSizeSmall:                                         12px;
+$fontSizeMedium:                                        14px;
+$fontSizeDeafault:                                      16px;
+$fontSizeBig:                                           18px;
+
+$fontSizeLightSmall:                                    18px;
+$fontSizeLightMedium:                                   20px;
+$fontSizeLightDefault:                                  21px;
+$fontSizeLightBig:                                      24px;
+
+$fontSizeDefaultSmall:                                  24px;
+$fontSizeDefaultMedium:                                 26px;
+$fontSizeDefaultDefault:                                28px;
+$fontSizeDefaultBig:                                    30px;
+
+$fontSizeStrongSmall:                                   24px;
+$fontSizeStrongMedium:                                  28px;
+$fontSizeStrongDefault:                                 32px;
+$fontSizeStrongBig:                                     36px;
+
+$fontSizeBoldSmall:                                     36px;
+$fontSizeBoldMedium:                                    40px;
+$fontSizeBoldDeafault:                                  44px;
+$fontSizeBoldBig:                                       48px;
+
+$fontSizeBolderSmall:                                   32px;
+$fontSizeBolderMedium:                                  48px;
+$fontSizeBolderDeafault:                                56px;
+$fontSizeBolderBig:                                     64px;
+
+$fontSizeMaxSmall:                                      50px;
+$fontSizeMaxMedium:                                     58px;
+$fontSizeMaxDeafault:                                   66px;
+$fontSizeMaxBig:                                        72px;
+
+$fontSizeEpicSmall:                                     84px;
+$fontSizeEpicMedium:                                    88px;
+$fontSizeEpicDeafault:                                  92px;
+$fontSizeEpicBig:                                       96px;
+//=====================================================================================================================
+
+//Line-heights ========================================================================================================
+$line-height-100p:                                      1.00;
+$line-height-110p:                                      1.10;
+$line-height-113p:                                      1.13;
+$line-height-116p:                                      1.16;
+$line-height-119p:                                      1.19;
+$line-height-122p:                                      1.22;
+$line-height-125p:                                      1.25;
+$line-height-129p:                                      1.29;
+$line-height-133p:                                      1.33;
+$line-height-138p:                                      1.38;
+$line-height-140p:                                      1.40;
+$line-height-142p:                                      1.42;
+$line-height-146p:                                      1.46;
+$line-height-150p:                                      1.50;
+$line-height-155p:                                      1.55;
+$line-height-160p:                                      1.60;
+$line-height-166p:                                      1.66;
+$line-height-171p:                                      1.71;
+$line-height-188p:                                      1.88;
+$line-height-200p:                                      2.00;
+$line-height-225p:                                      2.25;
+//=====================================================================================================================
+
+//z-indexs ============================================================================================================
+$z-index-minus-1:                                         -1;
+$z-index-0:                                                0;
+$z-index-1:                                                1;
+$z-index-2:                                                2;
+$z-index-3:                                                3;
+$z-index-4:                                                4;
+$z-index-5:                                                5;
+//=====================================================================================================================

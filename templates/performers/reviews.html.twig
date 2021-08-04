@@ -1,0 +1,274 @@
+{% set mark1 = 0 %}
+{% set mark2 = 0 %}
+{% set mark3 = 0 %}
+{% set mark4 = 0 %}
+{% set mark5 = 0 %}
+{% for review in performer.reviews %}
+    {% if review.mark == 1 %}
+        {% set mark1 = mark1 + 1 %}
+    {% elseif review.mark == 2 %}
+        {% set mark2 = mark2 + 1 %}
+    {% elseif review.mark == 3 %}
+        {% set mark3 = mark3 + 1 %}
+    {% elseif review.mark == 4 %}
+        {% set mark4 = mark4 + 1 %}
+    {% elseif review.mark == 5 %}
+        {% set mark5 = mark5 + 1 %}
+    {% endif %}
+{% endfor %}
+
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ performer.user.lastname }} {{ performer.user.firstname }}{% endblock %}
+
+{% block body %}
+    <div class="profile">
+        <div class="profile__block">
+            <div class="performer__block">
+                {% include 'performers/layoutPerformer.html.twig' %}
+            </div>
+        </div>
+        <div class="profile__block">
+            <div class="performer__data">
+                <div class="profile__data_title">
+                    Reviews
+                    <div class="profile__data-filter">
+                        <img src="{{ asset('build/images/filter.svg') }}">
+                        <div class="dropdown">
+                            <a href="{{ path('performerReviews', {'id': performer.id, 'filter': 'mark'}) }}">By Rating</a>
+                            <a href="{{ path('performerReviews', {'id': performer.id, 'filter': 'date'}) }}">By Date</a>
+                        </div>
+                    </div>
+                </div>
+                <div class="performer__reviews">
+                    <div class="performer__data_analytics">
+                        <div class="performer__data_rating">
+                            <div class="performer__data_mark">{{ performer.rating }}</div>
+                            <div class="performer__data_votes">{{ performer.reviews|length }} votes</div>
+                            <div class="performer__data_rate">
+                                {% if performer.rating|round == 5 %}
+                                    <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                {% elseif performer.rating|round == 4 %}
+                                    <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateStar.svg') }}">
+                                {% elseif performer.rating|round == 3 %}
+                                    <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateStar.svg') }}">
+                                {% elseif performer.rating|round == 2 %}
+                                    <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateStar.svg') }}">
+                                {% elseif performer.rating|round == 1 %}
+                                    <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateStar.svg') }}">
+                                    <img src="{{ asset('build/images/rateStar.svg') }}">
+                                {% endif %}
+                            </div>
+                        </div>
+                        <div class="performer__data_marks">
+                            <div class="performer__data_marks--mark">
+                                <div class="performer__data_marks--mark-number">5</div>
+                                <div class="performer__data_marks--mark-line">
+                                    <div class="performer__data_marks--mark-line percentage" id="mark5"></div>
+                                </div>
+                            </div>
+                            <div class="performer__data_marks--mark">
+                                <div class="performer__data_marks--mark-number">4</div>
+                                <div class="performer__data_marks--mark-line">
+                                    <div class="performer__data_marks--mark-line percentage" id="mark4"></div>
+                                </div>
+                            </div>
+                            <div class="performer__data_marks--mark">
+                                <div class="performer__data_marks--mark-number">3</div>
+                                <div class="performer__data_marks--mark-line">
+                                    <div class="performer__data_marks--mark-line percentage" id="mark3"></div>
+                                </div>
+                            </div>
+                            <div class="performer__data_marks--mark">
+                                <div class="performer__data_marks--mark-number">2</div>
+                                <div class="performer__data_marks--mark-line">
+                                    <div class="performer__data_marks--mark-line percentage" id="mark2"></div>
+                                </div>
+                            </div>
+                            <div class="performer__data_marks--mark">
+                                <div class="performer__data_marks--mark-number">1</div>
+                                <div class="performer__data_marks--mark-line">
+                                    <div class="performer__data_marks--mark-line percentage" id="mark1"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="performer__reviews_items">
+                        {% if reviews|length > 0 %}
+                            {% for review in reviews %}
+                                <div class="performer__review">
+                                    <div class="performer__review_header">
+                                        <div class="performer__review_customer">
+                                            <div class="performer__review_text">{{ review.client.user.firstname }} {{ review.client.user.lastname|slice(0, 1) }}.</div>
+                                            <div class="performer__review_customer-add">- Customer</div>
+                                        </div>
+                                        <div class="performer__review_add">{{ review.date|date('d.m.Y') }}</div>
+                                    </div>
+                                    <div class="performer__review_rating">
+                                        <div class="performers__item_rate">
+                                            {% if review.mark == 5 %}
+                                                <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                            {% elseif review.mark == 4 %}
+                                                <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateStar.svg') }}">
+                                            {% elseif review.mark == 3 %}
+                                                <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateStar.svg') }}">
+                                            {% elseif review.mark == 2 %}
+                                                <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateStar.svg') }}">
+                                            {% elseif review.mark == 1 %}
+                                                <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateStar.svg') }}">
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="performer__review_desc">
+                                        {{ review.text }}
+                                    </div>
+                                    <div class="performer__data_order">
+                                        <div class="performer__data_order-text">Review to order:</div>
+                                        <div class="performer__data_order-text">
+                                            {{ review.reviewedOrder.theme }}
+                                        </div>
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        {% else %}
+                            <div class="performer__review_desc">
+                                Performer hasn't now reviews
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if order and not order.reviews %}
+            <div class="profile__block">
+                {{ form_start(reviewForm, {'attr': {'class': 'performer__review_form'}}) }}
+                    <div class="performer__order_title">Add review</div>
+                    <div class="performer__order_form">
+                        <div class="auth__form-block">
+                            {{ form_label(reviewForm.type) }}
+                            {{ form_widget(reviewForm.type, {'attr': {'class': 'auth__form-block-select'}}) }}
+                        </div>
+                        <div class="performer__review_form-block">
+                            <label for="requirements">Mark</label>
+                            <div class="performer__review_form-rate">
+                                <img src="{{ asset('build/images/rateStar.svg') }}" class="rate" id="1">
+                                <img src="{{ asset('build/images/rateStar.svg') }}" class="rate" id="2">
+                                <img src="{{ asset('build/images/rateStar.svg') }}" class="rate" id="3">
+                                <img src="{{ asset('build/images/rateStar.svg') }}" class="rate" id="4">
+                                <img src="{{ asset('build/images/rateStar.svg') }}" class="rate" id="5">
+                            </div>
+                            <input type="hidden" name="mark" id="mark">
+                        </div>
+                        <div class="performer__order_form-block">
+                            {{ form_label(reviewForm.text) }}
+                            {{ form_widget(reviewForm.text) }}
+                        </div>
+                    </div>
+                    <button class="performer__order_form_btn" type="submit">Send</button>
+                {{ form_end(reviewForm) }}
+            </div>
+        {% endif %}
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script type="text/javascript">
+        document.querySelectorAll('.profile__data-filter').forEach( button => {
+            button.addEventListener('click', function () {
+                let display = button.childNodes[3].style.display;
+                if (display && display === 'none') {
+                    button.childNodes[3].style.display = 'block';
+                } else if (display === 'block') {
+                    button.childNodes[3].style.display = 'none';
+                } else {
+                    button.childNodes[3].style.display = 'block';
+                }
+
+                const img = button.childNodes[1];
+                if (img.src.indexOf('filter.svg') !== -1) {
+                    button.style.background = '#035FFE';
+                    img.src = "{{ asset('build/images/activeFilter.svg') }}";
+                } else if (img.src.indexOf('activeFilter.svg') !== -1) {
+                    button.style.background = '#FFFFFF';
+                    img.src = "{{ asset('build/images/filter.svg') }}";
+                }
+            });
+        });
+
+        document.querySelectorAll('.rate').forEach( img => {
+            img.addEventListener('click', function () {
+                document.getElementById('mark').value = img.id;
+                for (var num = 1; num <= 5; num++) {
+                    document.getElementById(num).src = "{{ asset('build/images/rateStar.svg') }}";
+                }
+                for (var number = 1; number <= img.id; number++) {
+                    document.getElementById(number).src = "{{ asset('build/images/rateActiveStar.svg') }}";
+                }
+            });
+        });
+
+        var count = {{ performer.reviews|length }};
+        var mark1 = {{ mark1 }};
+        var mark2 = {{ mark2 }};
+        var mark3 = {{ mark3 }};
+        var mark4 = {{ mark4 }};
+        var mark5 = {{ mark5 }};
+        document.getElementById('mark1').style.width = ((mark1/count) * 100) + '%';
+        document.getElementById('mark2').style.width = ((mark2/count) * 100) + '%';
+        document.getElementById('mark3').style.width = ((mark3/count) * 100) + '%';
+        document.getElementById('mark4').style.width = ((mark4/count) * 100) + '%';
+        document.getElementById('mark5').style.width = ((mark5/count) * 100) + '%';
+
+        document.querySelectorAll('.profile__data-filter').forEach( button => {
+            button.addEventListener('click', function () {
+                const img = button.childNodes[0];
+                if (img.src.indexOf('filter.svg') !== -1) {
+                    button.style.background = '#035FFE';
+                    img.src = "{{ asset('build/images/activeFilter.svg') }}";
+                } else if (img.src.indexOf('activeFilter.svg') !== -1) {
+                    button.style.background = '#FFFFFF';
+                    img.src = "{{ asset('build/images/filter.svg') }}";
+                }
+            });
+        });
+    </script>
+{% endblock %}

@@ -1,0 +1,49 @@
+{
+    "devDependencies": {
+        "@babel/core": "^7.12.10",
+        "@babel/preset-env": "^7.12.10",
+        "@symfony/stimulus-bridge": "^1.1.0",
+        "@symfony/webpack-encore": "^1.5.0",
+        "autoprefixer": "^10.1.0",
+        "babel-loader": "^8.2.2",
+        "babel-plugin-transform-runtime": "^6.23.0",
+        "babel-polyfill": "^6.26.0",
+        "babel-preset-es2017": "^6.24.1",
+        "concurrently": "^5.3.0",
+        "core-js": "^3.0.0",
+        "gulp": "^4.0.2",
+        "gulp-clean-css": "^4.3.0",
+        "gulp-postcss": "^9.0.0",
+        "gulp-sass": "^4.1.0",
+        "gulp-sourcemaps": "^3.0.0",
+        "node-sass": "^5.0.0",
+        "postcss": "^8.2.6",
+        "regenerator-runtime": "^0.13.2",
+        "source-map-loader": "^1.1.3",
+        "webpack": "^5.10.0",
+        "webpack-cli": "^4.2.0",
+        "webpack-notifier": "^1.13.0"
+    },
+    "license": "UNLICENSED",
+    "private": true,
+    "scripts": {
+        "clear": "gulp clear",
+        "watch:sass": "gulp watch",
+        "build:sass": "gulp build",
+        "watch": "concurrently \"webpack --mode=development --watch\" \"gulp watch\"",
+        "dev": "concurrently \"gulp dev\" \"webpack --mode=development\"",
+        "build": "concurrently \"gulp build\" \"webpack --mode=production\" ",
+        "dev:sass": "gulp dev"
+    },
+    "dependencies": {
+        "@babel/polyfill": "^7.12.1",
+        "idempotent-babel-polyfill": "^7.4.4",
+        "inputmask": "^5.0.6",
+        "intl-tel-input": "^17.0.13",
+        "vanilla-lazyload": "^17.4.0"
+    },
+    "optionalDependencies": {
+        "bufferutil": "^4.0.3",
+        "utf-8-validate": "^5.0.5"
+    }
+}

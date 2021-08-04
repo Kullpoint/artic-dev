@@ -1,0 +1,26 @@
+<div class="section-categories section-outer">
+    <div class="section-categories__wrapper">
+        <h2 class="section-categories__title text-fssb__bold">Categories</h2>
+        <div class="section-categories__description text-fsb__semibold">
+            with a variety of {{ allCategories|length }} topics and subtopics
+        </div>
+        <div class="section-categories__container">
+            {# categories #}
+            {% for category in categories %}
+                <a href="{{ path('performers', {'category': category.id}) }}" class="section-categories__category">
+                    <img src="{{ asset('img/' ~ category.image) }}" class="category__img">
+                    <div class="category__bottom">
+                        <h3 class="category__title text-fsb__bold">{{ category.topic }}</h3>
+                        <div class="category__performers text-fsm__semibold">{{ category.performers|length }} performers</div>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+        <a href="{{ path('categories') }}" class="section-categories__all">
+            <span class="text-fsm__bold">All categories</span>
+            <div class="arrow-block">
+                <i class="fas fa-arrow-right"></i>
+            </div>
+        </a>
+    </div>
+</div>

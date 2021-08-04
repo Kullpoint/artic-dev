@@ -1,0 +1,198 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ performer.user.lastname }} {{ performer.user.firstname }}{% endblock %}
+
+{% block body %}
+    <div class="profile">
+        <div class="performer">
+            <div class="performer__info">
+                <div class="performer__info_data">
+                    {% include 'performers/layoutPerformer.html.twig' %}
+                </div>
+                <div class="performer__line"></div>
+                <div class="performer__reviews">
+                    <div class="performer__reviews-title">Reviews:</div>
+                    {% if performer.reviews|length > 0 %}
+                        <div class="performer__reviews_items">
+                            {% for review in performer.reviews|slice(0, 3) %}
+                                <div class="performer__review">
+                                    <div class="performer__review_header">
+                                        <div class="performer__review_customer">
+                                            <div class="performer__review_text">{{ review.client.user.firstname }} {{ review.client.user.lastname|slice(0, 1) }}.</div>
+                                            <div class="performer__review_customer-add">- Customer</div>
+                                        </div>
+                                        <div class="performer__review_add">{{ review.date|date('d.m.Y') }}</div>
+                                    </div>
+                                    <div class="performer__review_rating">
+                                        <div class="performers__item_rate">
+                                            {% if review.mark == 5 %}
+                                                <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                            {% elseif review.mark == 4 %}
+                                                <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateStar.svg') }}">
+                                            {% elseif review.mark == 3 %}
+                                                <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateStar.svg') }}">
+                                            {% elseif review.mark == 2 %}
+                                                <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateStar.svg') }}">
+                                            {% elseif review.mark == 1 %}
+                                                <img src="{{ asset('build/images/rateActiveStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateStar.svg') }}">
+                                                <img src="{{ asset('build/images/rateStar.svg') }}">
+                                            {% endif %}
+                                        </div>
+                                    </div>
+                                    <div class="performer__review_desc preview">
+                                        {{ review.text }}
+                                    </div>
+                                </div>
+                            {% endfor %}
+                        </div>
+                        {% if performer.reviews|length > 3 %}
+                            <div class="performer__reviews_all"><a href="{{ path('performerReviews', {'id': performer.id}) }}">All reviews</a></div>
+                        {% elseif order is defined and performer.reviews|length <= 3 %}
+                            <div class="performer__reviews_all"><a href="{{ path('performerReviews', {'id': performer.id}) }}">Add review</a></div>
+                        {% endif %}
+                    {% else %}
+                        <div class="performer__review_desc">
+                            Performer hasn't now reviews
+                        </div>
+                        {% if order is defined %}
+                            <div class="performer__reviews_all"><a href="{{ path('performerReviews', {'id': performer.id}) }}">Add review</a></div>
+                        {% endif %}
+                    {% endif %}
+                </div>
+            </div>
+            <div class="performer__info_additionally">
+                <div class="performer__info_additionally_data">
+                    <div class="profile__data_title">Directions and price</div>
+                    <div class="performer__info_all">
+                        <div class="performer__info_price">€4,45 - €188,99</div>
+                        <div class="performers__item_types">
+                            {% for summeryType in summeryTypes %}
+                                <div class="performers__item_type">{{ summeryType }}</div>
+                            {% endfor %}
+                        </div>
+                        <div class="performer__item_types">
+                            <div class="performer__item_type">
+                                <div class="performer__item_type-text">Essay, Article, Technical writing</div>
+                                <div class="performer__item_type-price">- від 4,45 євро</div>
+                            </div>
+                            <div class="performer__item_line"></div>
+                            <div class="performer__item_type">
+                                <div class="performer__item_type-text">Summery</div>
+                                <div class="performer__item_type-price">- від 8,90 євро</div>
+                            </div>
+                            <div class="performer__item_line"></div>
+                            <div class="performer__item_type">
+                                <div class="performer__item_type-text">Research, Term Paper</div>
+                                <div class="performer__item_type-price">- від 17,81 євро</div>
+                            </div>
+                            <div class="performer__item_line"></div>
+                            <div class="performer__item_type">
+                                <div class="performer__item_type-text">Scientific articles, Graduate work</div>
+                                <div class="performer__item_type-price">- від 44,52 євро</div>
+                            </div>
+                        </div>
+                        {% if performer.about %}
+                            <div class="performer__item_about">
+                                <div class="performer__item_about-title">About me:</div>
+                                <div class="performer__item_about-info">
+                                    {{ performer.about }}
+                                </div>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% if orderForm is defined %}
+            {{ form_start(orderForm, {'attr': {'class': 'performer__order'}}) }}
+                <div class="performer__order_title">Order form</div>
+                <div class="performer__order_form">
+                    <div class="auth__form-block">
+                        {{ form_label(orderForm.theme) }}
+                        {{ form_widget(orderForm.theme, {'attr': {'class': 'auth__form-block-input', 'placeholder': 'Insert theme'}}) }}
+                    </div>
+                    <div class="auth__form-block-inputs">
+                        <div class="auth__form-block-inputs-block">
+                            {{ form_label(orderForm.category) }}
+                            {{ form_widget(orderForm.category, {'attr': {'class': 'auth__form-block-input', 'placeholder': 'Category'}}) }}
+                        </div>
+                        <div class="auth__form-block-inputs-block">
+                            {{ form_label(orderForm.summeryType) }}
+                            {{ form_widget(orderForm.summeryType, {'attr': {'class': 'auth__form-block-input', 'placeholder': 'Summery type'}}) }}
+                        </div>
+                    </div>
+                    <div class="auth__form-block">
+                        {{ form_label(orderForm.requirements) }}
+                        {{ form_widget(orderForm.requirements, {'attr': {'class': 'auth__form-block-input', 'placeholder': 'Describe requirements'}}) }}
+                    </div>
+                    <div class="performer__order_form-block">
+                        {{ form_label(orderForm.description) }}
+                        {{ form_widget(orderForm.description, {'attr': {'placeholder': 'Short describe'}}) }}
+                    </div>
+                    <div class="auth__form-block-inputs">
+                        <div class="auth__form-block-inputs-block">
+                            {{ form_label(orderForm.priceFrom) }}
+                            {{ form_widget(orderForm.priceFrom, {'attr': {'class': 'auth__form-block-input', 'placeholder': 'From'}}) }}
+                        </div>
+                        <div class="performer__order_form-range"> - </div>
+                        <div class="auth__form-block-inputs-block">
+                            {{ form_widget(orderForm.priceTo, {'attr': {'class': 'auth__form-block-input', 'placeholder': 'To'}}) }}
+                        </div>
+                    </div>
+                    <div class="auth__form-block">
+                        {{ form_label(orderForm.deadline) }}
+                        {{ form_widget(orderForm.deadline, {'attr': {'class': 'auth__form-block-date', 'placeholder': 'DD.MM.YYYY'}}) }}
+                    </div>
+                </div>
+                <button type="submit" class="performer__order_form_btn">Order</button>
+            {{ form_end(orderForm) }}
+        {% endif %}
+    </div>
+{% endblock %}
+{% block javascripts %}
+    <script>
+        function setInputFilter(textbox, inputFilter) {
+            ["input", "keydown", "keyup", "mousedown", "mouseup", "select", "contextmenu", "drop"].forEach(function(event) {
+                textbox.addEventListener(event, function() {
+                    if (inputFilter(this.value)) {
+                        this.oldValue = this.value;
+                        this.oldSelectionStart = this.selectionStart;
+                        this.oldSelectionEnd = this.selectionEnd;
+                    } else if (this.hasOwnProperty("oldValue")) {
+                        this.value = this.oldValue;
+                        this.setSelectionRange(this.oldSelectionStart, this.oldSelectionEnd);
+                    } else {
+                        this.value = "";
+                    }
+                });
+            });
+        }
+
+        setInputFilter(document.getElementById("order_summery_priceFrom"), function(value) {
+            return /^\d*\.?\d*$/.test(value); // Allow digits and '.' only, using a RegExp
+        });
+
+        setInputFilter(document.getElementById("order_summery_priceTo"), function(value) {
+            return /^\d*\.?\d*$/.test(value); // Allow digits and '.' only, using a RegExp
+        });
+    </script>
+{% endblock %}
